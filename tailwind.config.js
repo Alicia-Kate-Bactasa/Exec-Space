@@ -16,18 +16,19 @@ export default {
           'border-muted': 'var(--color-border-muted)',
           text: 'var(--color-text)',
           'text-muted': 'var(--color-text-muted)',
-          red: {
-            DEFAULT: '#991b1b',
-            accent: '#b91c1c',
-            hover: '#7f1d1d',
-            subtle: 'rgba(153, 27, 27, 0.15)',
-            glow: 'rgba(185, 28, 28, 0.25)',
+          violet: {
+            DEFAULT: '#6d28d9',
+            accent: '#7c3aed',
+            dark: '#5b21b6',
+            hover: '#4c1d95',
+            subtle: 'rgba(109, 40, 217, 0.14)',
+            glow: 'rgba(124, 58, 237, 0.20)',
           }
         }
       },
       fontFamily: {
         mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
-        sans: ['Space Grotesk', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Poppins', 'system-ui', '-apple-system', 'sans-serif'],
       }
     },
   },

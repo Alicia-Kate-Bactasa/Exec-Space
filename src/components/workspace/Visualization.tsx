@@ -51,50 +51,51 @@ export const Visualization: React.FC = () => {
   if (!currentResult || currentResult.rows.length === 0) {
     return (
       <div className="h-full flex flex-col items-center justify-center p-8 text-center text-investigative-text-muted">
-        <BarChart3 className="w-8 h-8 mb-2 text-investigative-border-muted" />
+        <BarChart3 className="w-8 h-8 mb-2 text-investigative-border-muted/50" />
         <p className="text-xs">Run a query with numeric results to render visualizations.</p>
       </div>
     );
   }
 
-  const COLORS = ['#b91c1c', '#991b1b', '#7f1d1d', '#52525b', '#3f3f46', '#27272a'];
+  // Dark violet monochromatic color ramp
+  const VIOLET_COLORS = ['#7c3aed', '#6d28d9', '#5b21b6', '#4c1d95', '#3b0764', '#8b5cf6'];
 
   return (
-    <div className="h-full flex flex-col p-4 bg-investigative-surface overflow-hidden">
+    <div className="h-full flex flex-col p-4 bg-investigative-surface/60 overflow-hidden">
       {/* Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-investigative-border text-xs mb-3 shrink-0">
-        <div className="flex items-center space-x-1 border border-investigative-border rounded p-0.5 bg-investigative-surface-raised">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-investigative-border/50 text-xs mb-3 shrink-0">
+        <div className="flex items-center space-x-1 border border-investigative-border/60 rounded-lg p-0.5 bg-investigative-surface-raised/40">
           <button
             onClick={() => setChartType('bar')}
-            className={`flex items-center space-x-1 px-2 py-1 rounded text-xs transition-colors ${
+            className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs transition-colors ${
               chartType === 'bar'
-                ? 'bg-investigative-red text-white'
+                ? 'bg-investigative-violet text-white font-medium shadow-xs'
                 : 'text-investigative-text-muted hover:text-investigative-text'
             }`}
           >
-            <BarChart3 className="w-3 h-3" />
+            <BarChart3 className="w-3.5 h-3.5" />
             <span>Bar</span>
           </button>
           <button
             onClick={() => setChartType('line')}
-            className={`flex items-center space-x-1 px-2 py-1 rounded text-xs transition-colors ${
+            className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs transition-colors ${
               chartType === 'line'
-                ? 'bg-investigative-red text-white'
+                ? 'bg-investigative-violet text-white font-medium shadow-xs'
                 : 'text-investigative-text-muted hover:text-investigative-text'
             }`}
           >
-            <LineChartIcon className="w-3 h-3" />
+            <LineChartIcon className="w-3.5 h-3.5" />
             <span>Line</span>
           </button>
           <button
             onClick={() => setChartType('donut')}
-            className={`flex items-center space-x-1 px-2 py-1 rounded text-xs transition-colors ${
+            className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs transition-colors ${
               chartType === 'donut'
-                ? 'bg-investigative-red text-white'
+                ? 'bg-investigative-violet text-white font-medium shadow-xs'
                 : 'text-investigative-text-muted hover:text-investigative-text'
             }`}
           >
-            <PieChartIcon className="w-3 h-3" />
+            <PieChartIcon className="w-3.5 h-3.5" />
             <span>Donut</span>
           </button>
         </div>
@@ -105,7 +106,7 @@ export const Visualization: React.FC = () => {
             <select
               value={xAxisKey}
               onChange={(e) => setXAxisKey(e.target.value)}
-              className="bg-investigative-surface-raised border border-investigative-border text-investigative-text px-2 py-1 rounded text-xs focus:outline-none focus:border-investigative-red"
+              className="bg-investigative-surface-raised border border-investigative-border/70 text-investigative-text px-2 py-1 rounded-md text-xs focus:outline-none focus:border-investigative-violet"
             >
               {currentResult.columns.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -118,7 +119,7 @@ export const Visualization: React.FC = () => {
             <select
               value={yAxisKey}
               onChange={(e) => setYAxisKey(e.target.value)}
-              className="bg-investigative-surface-raised border border-investigative-border text-investigative-text px-2 py-1 rounded text-xs focus:outline-none focus:border-investigative-red"
+              className="bg-investigative-surface-raised border border-investigative-border/70 text-investigative-text px-2 py-1 rounded-md text-xs focus:outline-none focus:border-investigative-violet"
             >
               {currentResult.columns.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -142,10 +143,10 @@ export const Visualization: React.FC = () => {
                   borderColor: 'var(--color-border)',
                   color: 'var(--color-text)',
                   fontSize: '12px',
-                  borderRadius: '4px',
+                  borderRadius: '6px',
                 }}
               />
-              <Bar dataKey={yAxisKey} fill="#b91c1c" radius={[2, 2, 0, 0]} />
+              <Bar dataKey={yAxisKey} fill="#7c3aed" radius={[4, 4, 0, 0]} />
             </BarChart>
           ) : chartType === 'line' ? (
             <LineChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 25 }}>
@@ -158,16 +159,16 @@ export const Visualization: React.FC = () => {
                   borderColor: 'var(--color-border)',
                   color: 'var(--color-text)',
                   fontSize: '12px',
-                  borderRadius: '4px',
+                  borderRadius: '6px',
                 }}
               />
               <Line
                 type="monotone"
                 dataKey={yAxisKey}
-                stroke="#b91c1c"
+                stroke="#7c3aed"
                 strokeWidth={2}
-                dot={{ fill: '#b91c1c', r: 3 }}
-                activeDot={{ r: 5, fill: '#ef4444' }}
+                dot={{ fill: '#7c3aed', r: 3 }}
+                activeDot={{ r: 5, fill: '#8b5cf6' }}
               />
             </LineChart>
           ) : (
@@ -178,7 +179,7 @@ export const Visualization: React.FC = () => {
                   borderColor: 'var(--color-border)',
                   color: 'var(--color-text)',
                   fontSize: '12px',
-                  borderRadius: '4px',
+                  borderRadius: '6px',
                 }}
               />
               <Pie
@@ -189,10 +190,10 @@ export const Visualization: React.FC = () => {
                 cy="50%"
                 innerRadius={50}
                 outerRadius={80}
-                paddingAngle={2}
+                paddingAngle={3}
               >
                 {chartData.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell key={`cell-${index}`} fill={VIOLET_COLORS[index % VIOLET_COLORS.length]} />
                 ))}
               </Pie>
             </PieChart>

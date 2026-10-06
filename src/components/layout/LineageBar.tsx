@@ -21,22 +21,22 @@ export const LineageBar: React.FC = () => {
     : 'Pending Query';
 
   return (
-    <div className="h-9 bg-investigative-surface/60 border-b border-investigative-border px-4 flex items-center justify-between text-xs overflow-x-auto select-none shrink-0">
+    <div className="h-9 bg-investigative-surface/40 border-b border-investigative-border/60 px-4 flex items-center justify-between text-xs overflow-x-auto select-none shrink-0">
       <div className="flex items-center space-x-2 text-investigative-text-muted font-mono">
-        <span className="text-[10px] tracking-wider uppercase font-semibold text-investigative-text-muted/70">
+        <span className="text-[10px] tracking-wider uppercase font-semibold text-investigative-text-muted/60">
           DATA LINEAGE:
         </span>
 
         {/* Step 1: Source Table */}
-        <div className="flex items-center space-x-1.5 bg-investigative-surface border border-investigative-border px-2 py-0.5 rounded text-investigative-text">
-          <Database className="w-3 h-3 text-investigative-red" />
-          <span className="font-semibold">{primaryTableName}</span>
+        <div className="flex items-center space-x-1.5 bg-investigative-surface-raised border border-investigative-border/60 px-2 py-0.5 rounded-md text-investigative-text">
+          <Database className="w-3 h-3 text-investigative-violet" />
+          <span className="font-medium">{primaryTableName}</span>
         </div>
 
         <ArrowRight className="w-3 h-3 text-investigative-border-muted" />
 
         {/* Step 2: Query Filter / Aggregation */}
-        <div className="flex items-center space-x-1.5 bg-investigative-surface border border-investigative-border px-2 py-0.5 rounded text-investigative-text">
+        <div className="flex items-center space-x-1.5 bg-investigative-surface-raised border border-investigative-border/60 px-2 py-0.5 rounded-md text-investigative-text">
           <Terminal className="w-3 h-3 text-investigative-text-muted" />
           <span>SQL Query</span>
         </div>
@@ -44,10 +44,10 @@ export const LineageBar: React.FC = () => {
         <ArrowRight className="w-3 h-3 text-investigative-border-muted" />
 
         {/* Step 3: Result Set */}
-        <div className={`flex items-center space-x-1.5 bg-investigative-surface border px-2 py-0.5 rounded ${
+        <div className={`flex items-center space-x-1.5 bg-investigative-surface-raised border px-2 py-0.5 rounded-md ${
           currentResult?.error
-            ? 'border-red-500/50 text-red-400'
-            : 'border-investigative-border text-investigative-text'
+            ? 'border-violet-500/50 text-violet-300'
+            : 'border-investigative-border/60 text-investigative-text'
         }`}>
           <Table className="w-3 h-3 text-investigative-text-muted" />
           <span>{rowCountText}</span>
@@ -56,8 +56,8 @@ export const LineageBar: React.FC = () => {
         <ArrowRight className="w-3 h-3 text-investigative-border-muted" />
 
         {/* Step 4: Destination */}
-        <div className="flex items-center space-x-1.5 bg-investigative-red-subtle border border-investigative-red/30 px-2 py-0.5 rounded text-investigative-text">
-          <Sparkles className="w-3 h-3 text-investigative-red" />
+        <div className="flex items-center space-x-1.5 bg-investigative-violet-subtle border border-investigative-violet/30 px-2 py-0.5 rounded-md text-investigative-text">
+          <Sparkles className="w-3 h-3 text-investigative-violet" />
           <span>
             {activeView === 'evidence'
               ? 'Evidence Board'

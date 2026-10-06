@@ -63,10 +63,10 @@ Choose Case → Explore Database → Write SQL → Inspect Results → Save Evid
 
 - **Minimalist Dark Investigative Palette**:
   - Near-black backgrounds (`#09090b`)
-  - Dark slate surfaces (`#18181b`)
-  - Violent crimson red accents (`#991b1b` / `#b91c1c`)
+  - Soft dark violet slate surfaces (`#121017`)
+  - Dark violet accents (`#6d28d9` / `#7c3aed`)
   - Monospaced typography for queries & data (`JetBrains Mono`)
-- **Full Light Theme Support**: Clean slate surfaces with deep crimson accents.
+- **Full Light Theme Support**: Clean slate surfaces with deep violet accents.
 - **Data Lineage**: Visual breadcrumb flow (`Table → SQL Query → Filtered Results → Target`).
 - **No AI Buzzwords**: Simple, student-friendly labels (Cases, Database, Query, Results, Evidence, Notes, Finding).
 

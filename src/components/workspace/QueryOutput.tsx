@@ -15,15 +15,15 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
   const hasData = currentResult && !currentResult.error && currentResult.rows.length > 0;
 
   return (
-    <div className="h-full flex flex-col bg-investigative-surface overflow-hidden">
+    <div className="h-full flex flex-col bg-investigative-surface/70 overflow-hidden">
       {/* Results Header */}
-      <div className="h-10 px-3 border-b border-investigative-border flex items-center justify-between bg-investigative-surface/80 shrink-0">
-        <div className="flex items-center space-x-1">
+      <div className="h-11 px-4 border-b border-investigative-border/50 flex items-center justify-between bg-investigative-surface/50 shrink-0">
+        <div className="flex items-center space-x-1.5 bg-investigative-surface-raised/40 p-1 rounded-lg border border-investigative-border/40">
           <button
             onClick={() => setActiveTab('table')}
-            className={`flex items-center space-x-1.5 px-2.5 py-1 rounded text-xs transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1 rounded-md text-xs transition-colors ${
               activeTab === 'table'
-                ? 'bg-investigative-surface-raised text-investigative-text font-medium border border-investigative-border'
+                ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
                 : 'text-investigative-text-muted hover:text-investigative-text'
             }`}
           >
@@ -33,9 +33,9 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
 
           <button
             onClick={() => setActiveTab('chart')}
-            className={`flex items-center space-x-1.5 px-2.5 py-1 rounded text-xs transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1 rounded-md text-xs transition-colors ${
               activeTab === 'chart'
-                ? 'bg-investigative-surface-raised text-investigative-text font-medium border border-investigative-border'
+                ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
                 : 'text-investigative-text-muted hover:text-investigative-text'
             }`}
           >
@@ -45,9 +45,9 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
 
           <button
             onClick={() => setActiveTab('notes')}
-            className={`flex items-center space-x-1.5 px-2.5 py-1 rounded text-xs transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1 rounded-md text-xs transition-colors ${
               activeTab === 'notes'
-                ? 'bg-investigative-surface-raised text-investigative-text font-medium border border-investigative-border'
+                ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
                 : 'text-investigative-text-muted hover:text-investigative-text'
             }`}
           >
@@ -61,7 +61,7 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
           {currentResult && (
             <div className="flex items-center space-x-2 text-[11px] font-mono text-investigative-text-muted">
               {currentResult.error ? (
-                <span className="text-rose-500 font-semibold">Error</span>
+                <span className="text-violet-400 font-medium">Query Error</span>
               ) : (
                 <>
                   <span>{currentResult.rowCount} rows</span>
@@ -75,10 +75,10 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
           <button
             onClick={onOpenSaveEvidence}
             disabled={!hasData || isExecuting}
-            className="flex items-center space-x-1 px-2.5 py-1 rounded text-xs font-medium border border-investigative-border hover:border-investigative-red hover:bg-investigative-red-subtle text-investigative-text transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-md text-xs font-medium border border-investigative-border/70 hover:border-investigative-violet hover:bg-investigative-violet-subtle text-investigative-text transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
             title="Save query and result to Evidence Board"
           >
-            <BookmarkPlus className="w-3.5 h-3.5 text-investigative-red" />
+            <BookmarkPlus className="w-3.5 h-3.5 text-investigative-violet" />
             <span>Save Evidence</span>
           </button>
         </div>
@@ -98,16 +98,16 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
               </div>
             ) : !currentResult ? (
               <div className="h-full flex flex-col items-center justify-center text-investigative-text-muted p-8 text-center select-none">
-                <Table className="w-8 h-8 mb-2 text-investigative-border-muted" />
+                <Table className="w-8 h-8 mb-2 text-investigative-border-muted/60" />
                 <p className="text-xs">Execute a SQL query to inspect database records.</p>
               </div>
             ) : currentResult.error ? (
-              <div className="p-4 m-3 bg-rose-500/10 border border-rose-500/30 rounded text-xs space-y-1.5 font-mono">
-                <div className="flex items-center space-x-1.5 text-rose-500 font-semibold">
+              <div className="p-4 m-3.5 bg-violet-950/20 border border-violet-500/30 rounded-lg text-xs space-y-1.5 font-mono">
+                <div className="flex items-center space-x-1.5 text-violet-400 font-semibold">
                   <AlertCircle className="w-4 h-4" />
-                  <span>SQL Error:</span>
+                  <span>SQL Execution Error:</span>
                 </div>
-                <div className="text-investigative-text whitespace-pre-wrap">
+                <div className="text-investigative-text whitespace-pre-wrap leading-relaxed">
                   {currentResult.error}
                 </div>
               </div>
@@ -118,25 +118,25 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
             ) : (
               <div className="min-w-full inline-block align-middle">
                 <table className="w-full text-left text-xs font-mono border-collapse">
-                  <thead className="bg-investigative-surface-raised/80 sticky top-0 border-b border-investigative-border text-investigative-text z-10 backdrop-blur-sm">
+                  <thead className="bg-investigative-surface-raised/80 sticky top-0 border-b border-investigative-border/50 text-investigative-text z-10 backdrop-blur-xs">
                     <tr>
-                      <th className="py-2 px-3 text-[10px] uppercase text-investigative-text-muted font-normal w-12 border-r border-investigative-border/50">
+                      <th className="py-2.5 px-3.5 text-[10px] uppercase text-investigative-text-muted font-normal w-12 border-r border-investigative-border/30">
                         #
                       </th>
                       {currentResult.columns.map((col) => (
-                        <th key={col} className="py-2 px-3 font-semibold border-r border-investigative-border/50 last:border-r-0">
+                        <th key={col} className="py-2.5 px-3.5 font-semibold border-r border-investigative-border/30 last:border-r-0">
                           {col}
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-investigative-border/50 text-investigative-text">
+                  <tbody className="divide-y divide-investigative-border/30 text-investigative-text">
                     {currentResult.rows.map((row, rowIdx) => (
                       <tr
                         key={rowIdx}
-                        className="hover:bg-investigative-surface-raised/50 transition-colors"
+                        className="hover:bg-investigative-surface-raised/40 transition-colors"
                       >
-                        <td className="py-1.5 px-3 text-[10px] text-investigative-text-muted/60 border-r border-investigative-border/50">
+                        <td className="py-2 px-3.5 text-[10px] text-investigative-text-muted/60 border-r border-investigative-border/30">
                           {rowIdx + 1}
                         </td>
                         {row.map((cell, cellIdx) => {
@@ -145,12 +145,12 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
                           return (
                             <td
                               key={cellIdx}
-                              className={`py-1.5 px-3 border-r border-investigative-border/50 last:border-r-0 truncate max-w-xs ${
-                                isNumeric ? 'text-right' : ''
+                              className={`py-2 px-3.5 border-r border-investigative-border/30 last:border-r-0 truncate max-w-xs ${
+                                isNumeric ? 'text-right font-medium' : ''
                               }`}
                             >
                               {isNull ? (
-                                <span className="text-investigative-text-muted/50 italic">NULL</span>
+                                <span className="text-investigative-text-muted/40 italic">NULL</span>
                               ) : (
                                 String(cell)
                               )}

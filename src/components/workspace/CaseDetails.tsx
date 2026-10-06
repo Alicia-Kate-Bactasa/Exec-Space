@@ -7,23 +7,23 @@ export const CaseDetails: React.FC = () => {
   const [showHints, setShowHints] = useState(false);
 
   return (
-    <div className="bg-investigative-surface border-b border-investigative-border p-4 select-none">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
-        <div className="flex items-center space-x-2">
-          <span className="text-xs font-mono font-bold bg-investigative-red text-white px-2 py-0.5 rounded tracking-wide">
+    <div className="bg-investigative-surface/60 border-b border-investigative-border/50 p-5 select-none shrink-0">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+        <div className="flex items-center space-x-2.5">
+          <span className="text-xs font-mono font-semibold bg-investigative-violet text-white px-2.5 py-1 rounded-md tracking-wide shadow-xs">
             {activeCase.code}
           </span>
-          <span className="text-xs font-mono border border-investigative-border px-2 py-0.5 rounded text-investigative-text-muted">
+          <span className="text-xs font-mono border border-investigative-border/70 px-2.5 py-1 rounded-md text-investigative-text-muted">
             {activeCase.category}
           </span>
-          <h1 className="text-base font-semibold text-investigative-text">
+          <h1 className="text-base font-semibold text-investigative-text tracking-tight">
             {activeCase.title}
           </h1>
         </div>
 
         <button
           onClick={() => setShowHints(!showHints)}
-          className="flex items-center space-x-1.5 text-xs text-investigative-text-muted hover:text-investigative-red self-start md:self-auto border border-investigative-border px-2 py-1 rounded transition-colors"
+          className="flex items-center space-x-1.5 text-xs text-investigative-text-muted hover:text-investigative-violet self-start md:self-auto border border-investigative-border/70 hover:border-investigative-violet/50 px-2.5 py-1 rounded-md transition-colors"
         >
           <HelpCircle className="w-3.5 h-3.5" />
           <span>{showHints ? 'Hide Hints' : 'Investigative Hints'}</span>
@@ -31,27 +31,28 @@ export const CaseDetails: React.FC = () => {
         </button>
       </div>
 
-      <p className="text-xs text-investigative-text leading-relaxed mb-2.5 max-w-4xl">
+      {/* Increased negative space and soft typography */}
+      <p className="text-xs text-investigative-text/90 leading-relaxed mb-3.5 max-w-5xl">
         {activeCase.problem}
       </p>
 
-      <div className="flex items-start space-x-2 bg-investigative-surface-raised/50 border border-investigative-border/80 px-3 py-2 rounded text-xs text-investigative-text">
-        <Target className="w-3.5 h-3.5 text-investigative-red mt-0.5 shrink-0" />
-        <div>
+      <div className="flex items-start space-x-2.5 bg-investigative-surface-raised/40 border border-investigative-border/50 px-3.5 py-2.5 rounded-lg text-xs text-investigative-text">
+        <Target className="w-4 h-4 text-investigative-violet mt-0.5 shrink-0" />
+        <div className="leading-relaxed">
           <span className="font-semibold text-investigative-text mr-1.5">Objective:</span>
           <span className="text-investigative-text-muted">{activeCase.objective}</span>
         </div>
       </div>
 
       {showHints && (
-        <div className="mt-3 bg-amber-500/10 border border-amber-500/20 p-3 rounded text-xs space-y-1.5 animate-fadeIn">
-          <div className="flex items-center space-x-1.5 font-semibold text-amber-500">
+        <div className="mt-3.5 bg-violet-500/10 border border-violet-500/20 p-3.5 rounded-lg text-xs space-y-2 animate-fadeIn">
+          <div className="flex items-center space-x-1.5 font-semibold text-violet-300">
             <AlertCircle className="w-3.5 h-3.5" />
             <span>Detective Leads:</span>
           </div>
-          <ul className="list-disc list-inside space-y-1 text-investigative-text pl-1">
+          <ul className="list-disc list-inside space-y-1 text-investigative-text-muted pl-1">
             {activeCase.hints.map((hint, idx) => (
-              <li key={idx} className="text-investigative-text-muted leading-relaxed">
+              <li key={idx} className="leading-relaxed">
                 {hint}
               </li>
             ))}

@@ -37,7 +37,7 @@ export const App: React.FC = () => {
 
           {/* Database Init / Error Banner if any */}
           {dbError && (
-            <div className="bg-rose-500/10 border-b border-rose-500/30 px-4 py-2 text-xs text-rose-500 font-mono">
+            <div className="bg-violet-950/20 border-b border-violet-500/30 px-4 py-2 text-xs text-violet-400 font-mono">
               Database Initialization Notice: {dbError}
             </div>
           )}

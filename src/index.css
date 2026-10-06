@@ -8,38 +8,37 @@
   --color-investigative-border-muted: var(--color-border-muted);
   --color-investigative-text: var(--color-text);
   --color-investigative-text-muted: var(--color-text-muted);
-  --color-investigative-red: #991b1b;
-  --color-investigative-red-accent: #b91c1c;
-  --color-investigative-red-hover: #7f1d1d;
-  --color-investigative-red-subtle: var(--color-accent-subtle);
+  --color-investigative-violet: #6d28d9;
+  --color-investigative-violet-dark: #5b21b6;
+  --color-investigative-violet-accent: #7c3aed;
+  --color-investigative-violet-hover: #4c1d95;
+  --color-investigative-violet-subtle: var(--color-accent-subtle);
   --font-mono: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
-  --font-sans: 'Space Grotesk', Inter, system-ui, -apple-system, sans-serif;
+  --font-sans: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 :root {
-  --color-bg: #f8f9fa;
+  --color-bg: #f8f7fa;
   --color-surface: #ffffff;
-  --color-surface-raised: #f1f3f5;
-  --color-border: #e4e4e7;
-  --color-border-muted: #d4d4d8;
-  --color-text: #09090b;
-  --color-text-muted: #71717a;
-  --color-accent-red: #991b1b;
-  --color-accent-red-hover: #7f1d1d;
-  --color-accent-subtle: rgba(153, 27, 27, 0.08);
+  --color-surface-raised: #f3f0f7;
+  --color-border: #e2dfec;
+  --color-border-muted: #d0cde0;
+  --color-text: #16151f;
+  --color-text-muted: #6e6b80;
+  --color-accent-violet: #6d28d9;
+  --color-accent-subtle: rgba(109, 40, 217, 0.08);
 }
 
 [data-theme="dark"] {
   --color-bg: #09090b;
-  --color-surface: #18181b;
-  --color-surface-raised: #222226;
-  --color-border: #27272a;
-  --color-border-muted: #3f3f46;
-  --color-text: #fafafa;
-  --color-text-muted: #a1a1aa;
-  --color-accent-red: #b91c1c;
-  --color-accent-red-hover: #991b1b;
-  --color-accent-subtle: rgba(185, 28, 28, 0.16);
+  --color-surface: #121017;
+  --color-surface-raised: #1c1926;
+  --color-border: #262235;
+  --color-border-muted: #38334d;
+  --color-text: #f5f4f8;
+  --color-text-muted: #9591a8;
+  --color-accent-violet: #7c3aed;
+  --color-accent-subtle: rgba(124, 58, 237, 0.16);
 }
 
 * {
@@ -69,19 +68,20 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-border);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-border-muted);
 }
 
-/* CodeMirror customization */
+/* Code Editor strictly uses JetBrains Mono */
 .cm-editor {
   height: 100%;
   font-family: var(--font-mono) !important;
   font-size: 13px !important;
   background-color: var(--color-surface) !important;
+  border-radius: 0.5rem;
 }
 
 .cm-scroller {
@@ -89,5 +89,15 @@ body {
 }
 
 [data-theme="dark"] .cm-editor {
-  background-color: #121214 !important;
+  background-color: #0f0d14 !important;
+}
+
+/* Resizable panel handle */
+[data-panel-resize-handle-id] {
+  transition: background-color 0.15s ease;
+}
+
+[data-panel-resize-handle-id]:hover,
+[data-panel-resize-handle-id][data-resize-handle-active] {
+  background-color: var(--color-accent-violet) !important;
 }

@@ -27,8 +27,8 @@ export const Workspace: React.FC = () => {
           </Panel>
 
           {/* Resize Handle */}
-          <PanelResizeHandle className="h-1.5 bg-investigative-border hover:bg-investigative-red transition-colors cursor-row-resize flex items-center justify-center shrink-0">
-            <div className="w-8 h-0.5 bg-investigative-border-muted rounded" />
+          <PanelResizeHandle className="h-1.5 bg-investigative-border/50 hover:bg-investigative-violet transition-colors cursor-row-resize flex items-center justify-center shrink-0">
+            <div className="w-8 h-0.5 bg-investigative-border-muted/60 rounded" />
           </PanelResizeHandle>
 
           {/* Bottom Panel: Query Output (Results / Chart / Notes) */}

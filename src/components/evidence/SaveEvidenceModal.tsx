@@ -36,26 +36,26 @@ export const SaveEvidenceModal: React.FC<SaveEvidenceModalProps> = ({ isOpen, on
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn">
-      <div className="bg-investigative-surface border border-investigative-border rounded-lg w-full max-w-lg shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn">
+      <div className="bg-investigative-surface border border-investigative-border/70 rounded-xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col">
         {/* Modal Header */}
-        <div className="p-4 border-b border-investigative-border flex items-center justify-between bg-investigative-surface-raised/40">
+        <div className="p-4 border-b border-investigative-border/50 flex items-center justify-between bg-investigative-surface-raised/30">
           <div className="flex items-center space-x-2 text-sm font-semibold text-investigative-text">
-            <BookmarkPlus className="w-4 h-4 text-investigative-red" />
+            <BookmarkPlus className="w-4 h-4 text-investigative-violet" />
             <span>Pin Evidence to Board</span>
           </div>
           <button
             onClick={onClose}
-            className="text-investigative-text-muted hover:text-investigative-text p-1 rounded"
+            className="text-investigative-text-muted hover:text-investigative-text p-1 rounded-md"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <form onSubmit={handleSubmit} className="p-4 space-y-3.5 text-xs">
+        <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs">
           <div>
-            <label className="block text-investigative-text font-medium mb-1">
+            <label className="block text-investigative-text font-medium mb-1.5">
               Evidence Title:
             </label>
             <input
@@ -64,12 +64,12 @@ export const SaveEvidenceModal: React.FC<SaveEvidenceModalProps> = ({ isOpen, on
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. ₱1.5M in failed orders counted in gross revenue"
-              className="w-full bg-investigative-surface-raised border border-investigative-border rounded px-3 py-2 text-investigative-text placeholder:text-investigative-text-muted/60 focus:outline-none focus:border-investigative-red font-mono"
+              className="w-full bg-investigative-surface-raised/40 border border-investigative-border/70 rounded-md px-3.5 py-2 text-investigative-text placeholder:text-investigative-text-muted/50 focus:outline-none focus:border-investigative-violet font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-investigative-text font-medium mb-1">
+            <label className="block text-investigative-text font-medium mb-1.5">
               Investigative Note:
             </label>
             <textarea
@@ -77,15 +77,15 @@ export const SaveEvidenceModal: React.FC<SaveEvidenceModalProps> = ({ isOpen, on
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Explain why this query or dataset is critical proof..."
-              className="w-full bg-investigative-surface-raised border border-investigative-border rounded px-3 py-2 text-investigative-text placeholder:text-investigative-text-muted/60 focus:outline-none focus:border-investigative-red resize-none font-mono"
+              className="w-full bg-investigative-surface-raised/40 border border-investigative-border/70 rounded-md px-3.5 py-2 text-investigative-text placeholder:text-investigative-text-muted/50 focus:outline-none focus:border-investigative-violet resize-none font-mono leading-relaxed"
             />
           </div>
 
           {/* Snapshot Summary */}
-          <div className="p-2.5 rounded bg-investigative-surface-raised/60 border border-investigative-border/70 space-y-1 font-mono text-[11px]">
+          <div className="p-3 rounded-lg bg-investigative-surface-raised/40 border border-investigative-border/50 space-y-1.5 font-mono text-[11px]">
             <div className="text-investigative-text-muted flex justify-between">
               <span>Rows Captured:</span>
-              <span className="text-investigative-text font-bold">{currentResult.rowCount} rows</span>
+              <span className="text-investigative-text font-semibold">{currentResult.rowCount} rows</span>
             </div>
             <div className="text-investigative-text-muted truncate">
               <span>Query: </span>
@@ -98,14 +98,14 @@ export const SaveEvidenceModal: React.FC<SaveEvidenceModalProps> = ({ isOpen, on
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-1.5 rounded border border-investigative-border text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised transition-colors"
+              className="px-3.5 py-1.5 rounded-md border border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!title.trim()}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded bg-investigative-red text-white hover:bg-investigative-red-hover transition-colors font-medium disabled:opacity-50"
+              className="flex items-center space-x-1.5 px-4 py-1.5 rounded-md bg-investigative-violet text-white hover:bg-investigative-violet-hover transition-colors font-medium disabled:opacity-40 shadow-xs"
             >
               <Check className="w-3.5 h-3.5" />
               <span>Save Evidence</span>

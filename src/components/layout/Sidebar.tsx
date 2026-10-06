@@ -38,14 +38,14 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-80 h-full border-r border-investigative-border bg-investigative-surface flex flex-col shrink-0 select-none">
+    <aside className="w-80 h-full border-r border-investigative-border/60 bg-investigative-surface/80 flex flex-col shrink-0 select-none">
       {/* SIDEBAR TABS: CASES vs DATABASE */}
-      <div className="h-10 px-2 border-b border-investigative-border flex items-center space-x-1 bg-investigative-surface-raised/40 shrink-0">
+      <div className="h-11 px-3 border-b border-investigative-border/50 flex items-center space-x-1.5 bg-investigative-surface-raised/30 shrink-0">
         <button
           onClick={() => setSidebarTab('cases')}
-          className={`flex-1 flex items-center justify-center space-x-1.5 py-1.5 rounded text-xs transition-colors font-mono ${
+          className={`flex-1 flex items-center justify-center space-x-1.5 py-1.5 rounded-md text-xs transition-colors font-mono ${
             sidebarTab === 'cases'
-              ? 'bg-investigative-surface text-investigative-text font-bold border border-investigative-border shadow-xs'
+              ? 'bg-investigative-surface text-investigative-text font-semibold border border-investigative-border/70 shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text'
           }`}
         >
@@ -55,20 +55,20 @@ export const Sidebar: React.FC = () => {
 
         <button
           onClick={() => setSidebarTab('database')}
-          className={`flex-1 flex items-center justify-center space-x-1.5 py-1.5 rounded text-xs transition-colors font-mono ${
+          className={`flex-1 flex items-center justify-center space-x-1.5 py-1.5 rounded-md text-xs transition-colors font-mono ${
             sidebarTab === 'database'
-              ? 'bg-investigative-surface text-investigative-text font-bold border border-investigative-border shadow-xs'
+              ? 'bg-investigative-surface text-investigative-text font-semibold border border-investigative-border/70 shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text'
           }`}
         >
-          <Database className="w-3.5 h-3.5 text-investigative-red" />
+          <Database className="w-3.5 h-3.5 text-investigative-violet" />
           <span>Database</span>
         </button>
       </div>
 
       {/* CONTENT: CASES LIST */}
       {sidebarTab === 'cases' && (
-        <div className="flex-1 overflow-y-auto p-2 space-y-2">
+        <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {cases.map((c) => {
             const isSelected = activeCase.id === c.id;
             return (
@@ -78,24 +78,24 @@ export const Sidebar: React.FC = () => {
                   selectCase(c.id);
                   setActiveView('workspace');
                 }}
-                className={`w-full text-left p-3 rounded transition-all flex flex-col border ${
+                className={`w-full text-left p-3 rounded-lg transition-all flex flex-col border ${
                   isSelected
-                    ? 'bg-investigative-surface-raised border-investigative-red shadow-sm'
-                    : 'bg-investigative-surface border-investigative-border/60 hover:bg-investigative-surface-raised/60 hover:border-investigative-border'
+                    ? 'bg-investigative-surface-raised border-investigative-violet/80 shadow-xs'
+                    : 'bg-investigative-surface border-investigative-border/50 hover:bg-investigative-surface-raised/50 hover:border-investigative-border/80'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className={`text-[11px] font-mono font-bold ${
-                    isSelected ? 'text-investigative-red' : 'text-investigative-text-muted'
+                  <span className={`text-[11px] font-mono font-semibold ${
+                    isSelected ? 'text-investigative-violet' : 'text-investigative-text-muted'
                   }`}>
                     {c.code}
                   </span>
-                  <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-medium ${
+                  <span className={`text-[10px] px-2 py-0.5 rounded-md font-mono font-medium ${
                     c.difficulty === 'Beginner'
-                      ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                       : c.difficulty === 'Intermediate'
-                      ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
-                      : 'bg-rose-500/10 text-rose-500 border border-rose-500/20'
+                      ? 'bg-violet-500/10 text-violet-400 border border-violet-500/20'
+                      : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
                   }`}>
                     {c.difficulty}
                   </span>
@@ -114,8 +114,8 @@ export const Sidebar: React.FC = () => {
 
       {/* CONTENT: DATABASE EXPLORER */}
       {sidebarTab === 'database' && (
-        <div className="flex-1 overflow-y-auto p-2 space-y-2">
-          <div className="p-2 mb-1 bg-investigative-surface-raised/40 border border-investigative-border/80 rounded flex items-center justify-between text-xs font-mono">
+        <div className="flex-1 overflow-y-auto p-3 space-y-2.5">
+          <div className="p-2.5 bg-investigative-surface-raised/40 border border-investigative-border/60 rounded-md flex items-center justify-between text-xs font-mono">
             <span className="text-investigative-text-muted">Target DB:</span>
             <span className="font-semibold text-investigative-text">
               {activeCase.id}_pg
@@ -127,7 +127,7 @@ export const Sidebar: React.FC = () => {
             return (
               <div
                 key={table.name}
-                className="border border-investigative-border/70 rounded overflow-hidden bg-investigative-surface"
+                className="border border-investigative-border/60 rounded-lg overflow-hidden bg-investigative-surface"
               >
                 <div
                   onClick={() => toggleTable(table.name)}
@@ -152,27 +152,27 @@ export const Sidebar: React.FC = () => {
                       setActiveView('workspace');
                     }}
                     title={`Sample 10 rows from ${table.name}`}
-                    className="p-1 rounded text-investigative-text-muted hover:text-investigative-red hover:bg-investigative-red-subtle transition-colors"
+                    className="p-1 rounded-md text-investigative-text-muted hover:text-investigative-violet hover:bg-investigative-violet-subtle transition-colors"
                   >
                     <Play className="w-3 h-3" />
                   </button>
                 </div>
 
                 {isExpanded && (
-                  <div className="px-3 py-2 bg-investigative-surface-raised/50 border-t border-investigative-border/60 space-y-1.5">
+                  <div className="px-3 py-2 bg-investigative-surface-raised/40 border-t border-investigative-border/50 space-y-1.5">
                     <p className="text-[11px] text-investigative-text-muted mb-2 leading-relaxed">
                       {table.description}
                     </p>
                     {table.columns.map((col) => (
                       <div
                         key={col.name}
-                        className="flex items-center justify-between text-xs font-mono py-1 border-b border-investigative-border/30 last:border-b-0 text-investigative-text-muted hover:text-investigative-text"
+                        className="flex items-center justify-between text-xs font-mono py-1 border-b border-investigative-border/20 last:border-b-0 text-investigative-text-muted hover:text-investigative-text"
                       >
                         <div className="flex items-center space-x-2 truncate">
                           {col.isPrimary ? (
-                            <Key className="w-3 h-3 text-amber-500 shrink-0" />
+                            <Key className="w-3 h-3 text-amber-400 shrink-0" />
                           ) : col.isForeign ? (
-                            <Key className="w-3 h-3 text-blue-400 shrink-0" />
+                            <Key className="w-3 h-3 text-violet-400 shrink-0" />
                           ) : (
                             <Columns className="w-3 h-3 text-investigative-border-muted shrink-0" />
                           )}
@@ -192,12 +192,12 @@ export const Sidebar: React.FC = () => {
       )}
 
       {/* FOOTER NAVIGATION */}
-      <div className="p-2 border-t border-investigative-border bg-investigative-surface-raised/30 space-y-1 shrink-0">
+      <div className="p-2.5 border-t border-investigative-border/60 bg-investigative-surface-raised/20 space-y-1 shrink-0">
         <button
           onClick={() => setActiveView('workspace')}
-          className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs transition-colors ${
+          className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-xs transition-colors ${
             activeView === 'workspace'
-              ? 'bg-investigative-red text-white font-medium shadow-xs'
+              ? 'bg-investigative-violet text-white font-medium shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised'
           }`}
         >
@@ -209,9 +209,9 @@ export const Sidebar: React.FC = () => {
 
         <button
           onClick={() => setActiveView('evidence')}
-          className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs transition-colors ${
+          className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-xs transition-colors ${
             activeView === 'evidence'
-              ? 'bg-investigative-red text-white font-medium shadow-xs'
+              ? 'bg-investigative-violet text-white font-medium shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised'
           }`}
         >
@@ -219,8 +219,8 @@ export const Sidebar: React.FC = () => {
             <BookmarkCheck className="w-3.5 h-3.5" />
             <span>Evidence Board</span>
           </div>
-          <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
-            activeView === 'evidence' ? 'bg-white/20 text-white' : 'bg-investigative-border text-investigative-text-muted'
+          <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+            activeView === 'evidence' ? 'bg-white/20 text-white' : 'bg-investigative-border/60 text-investigative-text-muted'
           }`}>
             {evidenceList.length}
           </span>
@@ -228,9 +228,9 @@ export const Sidebar: React.FC = () => {
 
         <button
           onClick={() => setActiveView('finding')}
-          className={`w-full flex items-center justify-between px-3 py-2 rounded text-xs transition-colors ${
+          className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-xs transition-colors ${
             activeView === 'finding'
-              ? 'bg-investigative-red text-white font-medium shadow-xs'
+              ? 'bg-investigative-violet text-white font-medium shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised'
           }`}
         >
