@@ -60,7 +60,7 @@ const getInitialTheme = (): 'dark' | 'light' => {
 export const useCaseStore = create<CaseStoreState>((set, get) => ({
   cases: CASE_LIST,
   activeCase: CASE_LIST[0], // Default to Case #04
-  activeView: 'workspace',
+  activeView: 'landing',
   currentStep: 'cases',
   currentSql: CASE_LIST[0].initialSql,
   currentResult: null,

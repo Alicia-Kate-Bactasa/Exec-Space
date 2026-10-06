@@ -37,22 +37,22 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
 
   return (
     <div className="h-full flex flex-col bg-investigative-surface/70 overflow-hidden">
-      {/* Editor Header with softer borders */}
-      <div className="h-11 px-4 border-b border-investigative-border/50 flex items-center justify-between bg-investigative-surface/50 shrink-0">
+      {/* Editor Header */}
+      <div className="h-12 px-4 border-b border-investigative-border/50 flex items-center justify-between bg-investigative-surface/50 shrink-0">
         <div className="flex items-center space-x-3">
-          <span className="text-xs font-mono font-semibold tracking-wider text-investigative-text uppercase">
+          <span className="text-sm font-mono font-bold tracking-wider text-investigative-text uppercase">
             Query
           </span>
-          <span className="hidden sm:inline-block text-[11px] font-mono text-investigative-text-muted/80">
+          <span className="hidden sm:inline-block text-xs font-mono text-investigative-text-muted/80">
             Ctrl + Enter to run
           </span>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2.5">
           {/* Muted Secondary History Button */}
           <button
             onClick={onToggleHistory}
-            className={`flex items-center space-x-1.5 px-2.5 py-1.5 rounded-md text-xs transition-colors border ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs md:text-sm transition-colors border ${
               showHistory
                 ? 'bg-investigative-surface-raised border-investigative-violet text-investigative-violet font-medium'
                 : 'border-investigative-border/60 text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised'
@@ -65,7 +65,7 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
           {/* Muted Secondary Clear Button */}
           <button
             onClick={() => setCurrentSql('')}
-            className="px-2.5 py-1.5 rounded-md text-xs text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised border border-investigative-border/60 transition-colors"
+            className="px-3 py-1.5 rounded-xl text-xs md:text-sm text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised border border-investigative-border/60 transition-colors"
             title="Clear editor"
           >
             Clear
@@ -75,7 +75,7 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
           <button
             onClick={handleRun}
             disabled={isExecuting || !isDbReady}
-            className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-md text-xs font-medium bg-investigative-violet hover:bg-investigative-violet-hover text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+            className="flex items-center space-x-2 px-4 py-1.5 rounded-xl text-xs md:text-sm font-medium bg-investigative-violet hover:bg-investigative-violet-hover text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-xs active:scale-[0.98]"
           >
             <Play className={`w-3.5 h-3.5 fill-white ${isExecuting ? 'animate-spin' : ''}`} />
             <span>{isExecuting ? 'Running...' : 'Run Query'}</span>
@@ -83,9 +83,9 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
         </div>
       </div>
 
-      {/* CodeMirror Workspace with negative space */}
-      <div className="flex-1 min-h-0 relative p-2.5 bg-investigative-surface/40">
-        <div className="h-full rounded-lg overflow-hidden border border-investigative-border/40">
+      {/* CodeMirror Workspace with negative space and rounded-xl */}
+      <div className="flex-1 min-h-0 relative p-3 bg-investigative-surface/40">
+        <div className="h-full rounded-xl overflow-hidden border border-investigative-border/40 shadow-2xs">
           <CodeMirror
             value={currentSql}
             height="100%"
@@ -93,7 +93,7 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
             extensions={[sql()]}
             onChange={(val) => setCurrentSql(val)}
             placeholder="-- Write SQL query here..."
-            className="h-full text-xs font-mono"
+            className="h-full text-xs md:text-sm font-mono"
             basicSetup={{
               lineNumbers: true,
               highlightActiveLineGutter: true,
@@ -105,39 +105,39 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
       </div>
 
       {/* Editor Footer / Quick Snippets */}
-      <div className="h-9 px-4 border-t border-investigative-border/50 bg-investigative-surface/40 flex items-center justify-between text-[11px] font-mono text-investigative-text-muted shrink-0 overflow-x-auto">
+      <div className="h-10 px-4 border-t border-investigative-border/50 bg-investigative-surface/40 flex items-center justify-between text-xs font-mono text-investigative-text-muted shrink-0 overflow-x-auto">
         <div className="flex items-center space-x-2">
-          <span className="text-[10px] uppercase text-investigative-text-muted/60">Quick:</span>
+          <span className="text-[11px] uppercase text-investigative-text-muted/60">Quick:</span>
           <button
             onClick={() => insertSnippet('SELECT * FROM orders LIMIT 10;')}
-            className="px-2 py-0.5 rounded-md hover:bg-investigative-surface-raised hover:text-investigative-text transition-colors"
+            className="px-2.5 py-1 rounded-lg hover:bg-investigative-surface-raised hover:text-investigative-text transition-colors"
           >
             SELECT *
           </button>
           <span>·</span>
           <button
             onClick={() => insertSnippet('GROUP BY column_name\nHAVING COUNT(*) > 1;')}
-            className="px-2 py-0.5 rounded-md hover:bg-investigative-surface-raised hover:text-investigative-text transition-colors"
+            className="px-2.5 py-1 rounded-lg hover:bg-investigative-surface-raised hover:text-investigative-text transition-colors"
           >
             GROUP BY & HAVING
           </button>
           <span>·</span>
           <button
             onClick={() => insertSnippet('JOIN refunds ON orders.order_id = refunds.order_id')}
-            className="px-2 py-0.5 rounded-md hover:bg-investigative-surface-raised hover:text-investigative-text transition-colors"
+            className="px-2.5 py-1 rounded-lg hover:bg-investigative-surface-raised hover:text-investigative-text transition-colors"
           >
             INNER JOIN
           </button>
           <span>·</span>
           <button
             onClick={() => insertSnippet('SUM(gross_amount) AS total')}
-            className="px-2 py-0.5 rounded-md hover:bg-investigative-surface-raised hover:text-investigative-text transition-colors"
+            className="px-2.5 py-1 rounded-lg hover:bg-investigative-surface-raised hover:text-investigative-text transition-colors"
           >
             SUM()
           </button>
         </div>
 
-        <span className="text-[10px] text-investigative-text-muted/70">
+        <span className="text-xs text-investigative-text-muted/70">
           PGlite Engine
         </span>
       </div>

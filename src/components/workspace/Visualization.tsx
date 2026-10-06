@@ -63,50 +63,50 @@ export const Visualization: React.FC = () => {
   return (
     <div className="h-full flex flex-col p-4 bg-investigative-surface/60 overflow-hidden">
       {/* Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-investigative-border/50 text-xs mb-3 shrink-0">
-        <div className="flex items-center space-x-1 border border-investigative-border/60 rounded-lg p-0.5 bg-investigative-surface-raised/40">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-investigative-border/50 text-sm mb-3 shrink-0">
+        <div className="flex items-center space-x-1 border border-investigative-border/60 rounded-xl p-1 bg-investigative-surface-raised/40">
           <button
             onClick={() => setChartType('bar')}
-            className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
               chartType === 'bar'
                 ? 'bg-investigative-violet text-white font-medium shadow-xs'
                 : 'text-investigative-text-muted hover:text-investigative-text'
             }`}
           >
-            <BarChart3 className="w-3.5 h-3.5" />
+            <BarChart3 className="w-4 h-4" />
             <span>Bar</span>
           </button>
           <button
             onClick={() => setChartType('line')}
-            className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
               chartType === 'line'
                 ? 'bg-investigative-violet text-white font-medium shadow-xs'
                 : 'text-investigative-text-muted hover:text-investigative-text'
             }`}
           >
-            <LineChartIcon className="w-3.5 h-3.5" />
+            <LineChartIcon className="w-4 h-4" />
             <span>Line</span>
           </button>
           <button
             onClick={() => setChartType('donut')}
-            className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-xs transition-colors ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
               chartType === 'donut'
                 ? 'bg-investigative-violet text-white font-medium shadow-xs'
                 : 'text-investigative-text-muted hover:text-investigative-text'
             }`}
           >
-            <PieChartIcon className="w-3.5 h-3.5" />
+            <PieChartIcon className="w-4 h-4" />
             <span>Donut</span>
           </button>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-1.5 font-mono">
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 font-mono text-sm">
             <span className="text-investigative-text-muted">X-Axis:</span>
             <select
               value={xAxisKey}
               onChange={(e) => setXAxisKey(e.target.value)}
-              className="bg-investigative-surface-raised border border-investigative-border/70 text-investigative-text px-2 py-1 rounded-md text-xs focus:outline-none focus:border-investigative-violet"
+              className="bg-investigative-surface-raised border border-investigative-border/70 text-investigative-text px-3 py-1.5 rounded-xl text-sm focus:outline-none focus:border-investigative-violet"
             >
               {currentResult.columns.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -114,12 +114,12 @@ export const Visualization: React.FC = () => {
             </select>
           </div>
 
-          <div className="flex items-center space-x-1.5 font-mono">
+          <div className="flex items-center space-x-2 font-mono text-sm">
             <span className="text-investigative-text-muted">Y-Axis:</span>
             <select
               value={yAxisKey}
               onChange={(e) => setYAxisKey(e.target.value)}
-              className="bg-investigative-surface-raised border border-investigative-border/70 text-investigative-text px-2 py-1 rounded-md text-xs focus:outline-none focus:border-investigative-violet"
+              className="bg-investigative-surface-raised border border-investigative-border/70 text-investigative-text px-3 py-1.5 rounded-xl text-sm focus:outline-none focus:border-investigative-violet"
             >
               {currentResult.columns.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -142,33 +142,33 @@ export const Visualization: React.FC = () => {
                   backgroundColor: 'var(--color-surface-raised)',
                   borderColor: 'var(--color-border)',
                   color: 'var(--color-text)',
-                  fontSize: '12px',
-                  borderRadius: '6px',
+                  fontSize: '13px',
+                  borderRadius: '12px',
                 }}
               />
-              <Bar dataKey={yAxisKey} fill="#7c3aed" radius={[4, 4, 0, 0]} />
+              <Bar dataKey={yAxisKey} fill="#7c3aed" radius={[8, 8, 0, 0]} />
             </BarChart>
           ) : chartType === 'line' ? (
             <LineChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 25 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-              <XAxis dataKey={xAxisKey} stroke="var(--color-text-muted)" fontSize={11} tickLine={false} />
-              <YAxis stroke="var(--color-text-muted)" fontSize={11} tickLine={false} />
+              <XAxis dataKey={xAxisKey} stroke="var(--color-text-muted)" fontSize={12} tickLine={false} />
+              <YAxis stroke="var(--color-text-muted)" fontSize={12} tickLine={false} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: 'var(--color-surface-raised)',
                   borderColor: 'var(--color-border)',
                   color: 'var(--color-text)',
-                  fontSize: '12px',
-                  borderRadius: '6px',
+                  fontSize: '13px',
+                  borderRadius: '12px',
                 }}
               />
               <Line
                 type="monotone"
                 dataKey={yAxisKey}
                 stroke="#7c3aed"
-                strokeWidth={2}
-                dot={{ fill: '#7c3aed', r: 3 }}
-                activeDot={{ r: 5, fill: '#8b5cf6' }}
+                strokeWidth={2.5}
+                dot={{ fill: '#7c3aed', r: 4 }}
+                activeDot={{ r: 6, fill: '#8b5cf6' }}
               />
             </LineChart>
           ) : (
@@ -178,8 +178,8 @@ export const Visualization: React.FC = () => {
                   backgroundColor: 'var(--color-surface-raised)',
                   borderColor: 'var(--color-border)',
                   color: 'var(--color-text)',
-                  fontSize: '12px',
-                  borderRadius: '6px',
+                  fontSize: '13px',
+                  borderRadius: '12px',
                 }}
               />
               <Pie
