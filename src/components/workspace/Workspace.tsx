@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Group, Panel, Separator } from 'react-resizable-panels';
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import { CaseDetails } from './CaseDetails';
 import { SqlEditor } from './SqlEditor';
 import { QueryOutput } from './QueryOutput';
@@ -17,9 +17,9 @@ export const Workspace: React.FC = () => {
 
       {/* Resizable Split Panels for SQL Query & Results */}
       <div className="flex-1 min-h-0 relative">
-        <Group orientation="vertical" id="workspace-group">
+        <PanelGroup direction="vertical" className="h-full w-full">
           {/* Top Panel: SQL Editor */}
-          <Panel id="sql-panel" minSize={20}>
+          <Panel defaultSize={45} minSize={20} className="flex flex-col overflow-hidden">
             <SqlEditor
               onToggleHistory={() => setShowHistory(!showHistory)}
               showHistory={showHistory}
@@ -27,16 +27,15 @@ export const Workspace: React.FC = () => {
           </Panel>
 
           {/* Resize Handle */}
-          <Separator
-            id="workspace-separator"
-            className="h-1 bg-investigative-border hover:bg-investigative-red transition-colors cursor-row-resize"
-          />
+          <PanelResizeHandle className="h-1.5 bg-investigative-border hover:bg-investigative-red transition-colors cursor-row-resize flex items-center justify-center shrink-0">
+            <div className="w-8 h-0.5 bg-investigative-border-muted rounded" />
+          </PanelResizeHandle>
 
           {/* Bottom Panel: Query Output (Results / Chart / Notes) */}
-          <Panel id="results-panel" minSize={25}>
+          <Panel defaultSize={55} minSize={25} className="flex flex-col overflow-hidden">
             <QueryOutput onOpenSaveEvidence={() => setShowSaveEvidenceModal(true)} />
           </Panel>
-        </Group>
+        </PanelGroup>
 
         {/* History Flyout Drawer */}
         <QueryHistory

@@ -23,11 +23,13 @@ interface CaseStoreState {
   notes: Record<string, string>;
   findings: Record<string, FindingSubmission>;
   theme: 'dark' | 'light';
+  sidebarTab: 'cases' | 'database';
   isExecuting: boolean;
   isDbReady: boolean;
   dbError: string | null;
 
   // Actions
+  setSidebarTab: (tab: 'cases' | 'database') => void;
   selectCase: (caseId: string) => Promise<void>;
   setActiveView: (view: ActiveView) => void;
   setCurrentStep: (step: InvestigationStep) => void;
@@ -67,9 +69,12 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
   notes: {},
   findings: {},
   theme: getInitialTheme(),
+  sidebarTab: 'cases',
   isExecuting: false,
   isDbReady: false,
   dbError: null,
+
+  setSidebarTab: (tab) => set({ sidebarTab: tab }),
 
   selectCase: async (caseId: string) => {
     const selected = get().cases.find((c) => c.id === caseId) || get().cases[0];
@@ -80,6 +85,7 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
       isDbReady: false,
       dbError: null,
       currentStep: 'schema',
+      sidebarTab: 'database',
     });
 
     try {

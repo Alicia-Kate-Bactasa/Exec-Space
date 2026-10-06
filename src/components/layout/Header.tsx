@@ -13,11 +13,17 @@ const STEPS: { key: InvestigationStep; label: string; num: number }[] = [
 ];
 
 export const Header: React.FC = () => {
-  const { currentStep, setCurrentStep, setActiveView, theme, toggleTheme, resetCurrentCase } = useCaseStore();
+  const { currentStep, setCurrentStep, setActiveView, setSidebarTab, theme, toggleTheme, resetCurrentCase } = useCaseStore();
 
   const handleStepClick = (step: InvestigationStep) => {
     setCurrentStep(step);
-    if (step === 'evidence') {
+    if (step === 'cases') {
+      setSidebarTab('cases');
+      setActiveView('workspace');
+    } else if (step === 'schema') {
+      setSidebarTab('database');
+      setActiveView('workspace');
+    } else if (step === 'evidence') {
       setActiveView('evidence');
     } else if (step === 'finding') {
       setActiveView('finding');
