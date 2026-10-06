@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --color-investigative-bg: var(--color-bg);
+  --color-investigative-surface: var(--color-surface);
+  --color-investigative-surface-raised: var(--color-surface-raised);
+  --color-investigative-border: var(--color-border);
+  --color-investigative-border-muted: var(--color-border-muted);
+  --color-investigative-text: var(--color-text);
+  --color-investigative-text-muted: var(--color-text-muted);
+  --color-investigative-red: #991b1b;
+  --color-investigative-red-accent: #b91c1c;
+  --color-investigative-red-hover: #7f1d1d;
+  --color-investigative-red-subtle: var(--color-accent-subtle);
+  --font-mono: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
+  --font-sans: 'Space Grotesk', Inter, system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f1f3f5;
+  --color-border: #e4e4e7;
+  --color-border-muted: #d4d4d8;
+  --color-text: #09090b;
+  --color-text-muted: #71717a;
+  --color-accent-red: #991b1b;
+  --color-accent-red-hover: #7f1d1d;
+  --color-accent-subtle: rgba(153, 27, 27, 0.08);
+}
+
+[data-theme="dark"] {
+  --color-bg: #09090b;
+  --color-surface: #18181b;
+  --color-surface-raised: #222226;
+  --color-border: #27272a;
+  --color-border-muted: #3f3f46;
+  --color-text: #fafafa;
+  --color-text-muted: #a1a1aa;
+  --color-accent-red: #b91c1c;
+  --color-accent-red-hover: #991b1b;
+  --color-accent-subtle: rgba(185, 28, 28, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-muted);
+}
+
+/* CodeMirror customization */
+.cm-editor {
+  height: 100%;
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
+  background-color: var(--color-surface) !important;
+}
+
+.cm-scroller {
+  font-family: var(--font-mono) !important;
+}
+
+[data-theme="dark"] .cm-editor {
+  background-color: #121214 !important;
+}
