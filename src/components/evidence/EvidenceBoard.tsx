@@ -29,14 +29,14 @@ export const EvidenceBoard: React.FC = () => {
         <div className="flex items-center space-x-2.5">
           <button
             onClick={() => setActiveView('workspace')}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm border border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised transition-colors"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-full text-sm border border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised transition-colors"
           >
             <Plus className="w-4 h-4" />
             <span>Investigate</span>
           </button>
           <button
             onClick={() => setActiveView('finding')}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-medium bg-investigative-violet text-white hover:bg-investigative-violet-hover transition-colors shadow-xs"
+            className="flex items-center space-x-1.5 px-5 py-2 rounded-full text-sm font-medium bg-investigative-violet text-white hover:bg-investigative-violet-hover transition-colors shadow-xs"
           >
             <span>Proceed to Finding</span>
             <ArrowRight className="w-4 h-4" />
@@ -46,15 +46,15 @@ export const EvidenceBoard: React.FC = () => {
 
       {/* Grid of Evidence Cards */}
       {caseEvidence.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-12 text-center border border-dashed border-investigative-border/60 rounded-2xl bg-investigative-surface/30">
+        <div className="flex-1 flex flex-col items-center justify-center p-12 text-center border border-dashed border-investigative-border/60 rounded-3xl bg-investigative-surface/30">
           <BookmarkCheck className="w-12 h-12 text-investigative-border-muted/50 mb-3" />
           <h2 className="text-base font-semibold text-investigative-text mb-1.5">No Evidence Saved Yet</h2>
-          <p className="text-sm text-investigative-text-muted max-w-md mb-5 leading-relaxed">
+          <p className="text-sm font-light text-investigative-text-muted max-w-md mb-5 leading-relaxed">
             Run queries in the investigation workspace, inspect anomalies, and click <span className="font-semibold text-investigative-text">"Save Evidence"</span> to pin findings here.
           </p>
           <button
             onClick={() => setActiveView('workspace')}
-            className="px-4 py-2 rounded-xl text-sm bg-investigative-surface-raised border border-investigative-border/70 text-investigative-text hover:border-investigative-violet transition-colors font-medium"
+            className="px-5 py-2.5 rounded-full text-sm bg-investigative-surface-raised border border-investigative-border/70 text-investigative-text hover:border-investigative-violet transition-colors font-medium"
           >
             Open Investigation Workspace
           </button>

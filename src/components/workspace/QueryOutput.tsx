@@ -18,10 +18,10 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
     <div className="h-full flex flex-col bg-investigative-surface/70 overflow-hidden">
       {/* Results Header */}
       <div className="h-12 px-4 border-b border-investigative-border/50 flex items-center justify-between bg-investigative-surface/50 shrink-0">
-        <div className="flex items-center space-x-1.5 bg-investigative-surface-raised/40 p-1 rounded-xl border border-investigative-border/40">
+        <div className="flex items-center space-x-1 bg-investigative-surface-raised/40 p-1 rounded-full border border-investigative-border/40">
           <button
             onClick={() => setActiveTab('table')}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
+            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm transition-colors ${
               activeTab === 'table'
                 ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
                 : 'text-investigative-text-muted hover:text-investigative-text'
@@ -33,7 +33,7 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
 
           <button
             onClick={() => setActiveTab('chart')}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
+            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm transition-colors ${
               activeTab === 'chart'
                 ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
                 : 'text-investigative-text-muted hover:text-investigative-text'
@@ -45,7 +45,7 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
 
           <button
             onClick={() => setActiveTab('notes')}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
+            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm transition-colors ${
               activeTab === 'notes'
                 ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
                 : 'text-investigative-text-muted hover:text-investigative-text'
@@ -75,7 +75,7 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
           <button
             onClick={onOpenSaveEvidence}
             disabled={!hasData || isExecuting}
-            className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-sm font-medium border border-investigative-border/70 hover:border-investigative-violet hover:bg-investigative-violet-subtle text-investigative-text transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+            className="flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm font-medium border border-investigative-border/70 hover:border-investigative-violet hover:bg-investigative-violet-subtle text-investigative-text transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
             title="Save query and result to Evidence"
           >
             <BookmarkPlus className="w-4 h-4 text-investigative-violet" />

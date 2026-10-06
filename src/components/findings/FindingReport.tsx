@@ -158,7 +158,7 @@ export const FindingReport: React.FC = () => {
             <div className="pt-2 flex items-center justify-end">
               <button
                 type="submit"
-                className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-investigative-violet text-white hover:bg-investigative-violet-hover transition-colors font-medium shadow-xs text-sm"
+                className="flex items-center space-x-2 px-6 py-2.5 rounded-full bg-investigative-violet text-white hover:bg-investigative-violet-hover transition-colors font-medium shadow-xs text-sm"
               >
                 <ShieldCheck className="w-4 h-4" />
                 <span>Submit Finding</span>

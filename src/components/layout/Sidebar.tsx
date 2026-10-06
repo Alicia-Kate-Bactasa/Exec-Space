@@ -43,7 +43,7 @@ export const Sidebar: React.FC = () => {
       <div className="h-12 px-3 border-b border-investigative-border/50 flex items-center space-x-2 bg-investigative-surface-raised/30 shrink-0">
         <button
           onClick={() => setSidebarTab('cases')}
-          className={`flex-1 flex items-center justify-center space-x-1.5 py-1.5 rounded-xl text-sm transition-colors font-medium ${
+          className={`flex-1 flex items-center justify-center space-x-1.5 py-1.5 rounded-full text-sm transition-colors font-medium ${
             sidebarTab === 'cases'
               ? 'bg-investigative-surface text-investigative-text font-semibold border border-investigative-border/70 shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text'
@@ -55,7 +55,7 @@ export const Sidebar: React.FC = () => {
 
         <button
           onClick={() => setSidebarTab('database')}
-          className={`flex-1 flex items-center justify-center space-x-1.5 py-1.5 rounded-xl text-sm transition-colors font-medium ${
+          className={`flex-1 flex items-center justify-center space-x-1.5 py-1.5 rounded-full text-sm transition-colors font-medium ${
             sidebarTab === 'database'
               ? 'bg-investigative-surface text-investigative-text font-semibold border border-investigative-border/70 shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text'
@@ -195,7 +195,7 @@ export const Sidebar: React.FC = () => {
       <div className="p-3 border-t border-investigative-border/60 bg-investigative-surface-raised/20 space-y-1.5 shrink-0">
         <button
           onClick={() => setActiveView('workspace')}
-          className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-sm transition-colors ${
+          className={`w-full flex items-center justify-between px-4 py-2 rounded-full text-sm transition-colors ${
             activeView === 'workspace'
               ? 'bg-investigative-violet text-white font-medium shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised'
@@ -209,7 +209,7 @@ export const Sidebar: React.FC = () => {
 
         <button
           onClick={() => setActiveView('evidence')}
-          className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-sm transition-colors ${
+          className={`w-full flex items-center justify-between px-4 py-2 rounded-full text-sm transition-colors ${
             activeView === 'evidence'
               ? 'bg-investigative-violet text-white font-medium shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised'
@@ -228,7 +228,7 @@ export const Sidebar: React.FC = () => {
 
         <button
           onClick={() => setActiveView('finding')}
-          className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-sm transition-colors ${
+          className={`w-full flex items-center justify-between px-4 py-2 rounded-full text-sm transition-colors ${
             activeView === 'finding'
               ? 'bg-investigative-violet text-white font-medium shadow-xs'
               : 'text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised'

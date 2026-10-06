@@ -52,7 +52,7 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
           {/* Muted Secondary History Button */}
           <button
             onClick={onToggleHistory}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs md:text-sm transition-colors border ${
+            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-xs md:text-sm transition-colors border ${
               showHistory
                 ? 'bg-investigative-surface-raised border-investigative-violet text-investigative-violet font-medium'
                 : 'border-investigative-border/60 text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised'
@@ -65,7 +65,7 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
           {/* Muted Secondary Clear Button */}
           <button
             onClick={() => setCurrentSql('')}
-            className="px-3 py-1.5 rounded-xl text-xs md:text-sm text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised border border-investigative-border/60 transition-colors"
+            className="px-3.5 py-1.5 rounded-full text-xs md:text-sm text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised border border-investigative-border/60 transition-colors"
             title="Clear editor"
           >
             Clear
@@ -75,7 +75,7 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
           <button
             onClick={handleRun}
             disabled={isExecuting || !isDbReady}
-            className="flex items-center space-x-2 px-4 py-1.5 rounded-xl text-xs md:text-sm font-medium bg-investigative-violet hover:bg-investigative-violet-hover text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-xs active:scale-[0.98]"
+            className="flex items-center space-x-2 px-5 py-1.5 rounded-full text-xs md:text-sm font-medium bg-investigative-violet hover:bg-investigative-violet-hover text-white transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed shadow-xs active:scale-[0.98]"
           >
             <Play className={`w-3.5 h-3.5 fill-white ${isExecuting ? 'animate-spin' : ''}`} />
             <span>{isExecuting ? 'Running...' : 'Run Query'}</span>
