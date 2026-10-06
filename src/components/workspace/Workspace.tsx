@@ -1,0 +1,55 @@
+import React, { useState } from 'react';
+import { Group, Panel, Separator } from 'react-resizable-panels';
+import { CaseDetails } from './CaseDetails';
+import { SqlEditor } from './SqlEditor';
+import { QueryOutput } from './QueryOutput';
+import { QueryHistory } from './QueryHistory';
+import { SaveEvidenceModal } from '../evidence/SaveEvidenceModal';
+
+export const Workspace: React.FC = () => {
+  const [showHistory, setShowHistory] = useState(false);
+  const [showSaveEvidenceModal, setShowSaveEvidenceModal] = useState(false);
+
+  return (
+    <div className="h-full flex flex-col overflow-hidden relative">
+      {/* Case Details at Top */}
+      <CaseDetails />
+
+      {/* Resizable Split Panels for SQL Query & Results */}
+      <div className="flex-1 min-h-0 relative">
+        <Group orientation="vertical" id="workspace-group">
+          {/* Top Panel: SQL Editor */}
+          <Panel id="sql-panel" minSize={20}>
+            <SqlEditor
+              onToggleHistory={() => setShowHistory(!showHistory)}
+              showHistory={showHistory}
+            />
+          </Panel>
+
+          {/* Resize Handle */}
+          <Separator
+            id="workspace-separator"
+            className="h-1 bg-investigative-border hover:bg-investigative-red transition-colors cursor-row-resize"
+          />
+
+          {/* Bottom Panel: Query Output (Results / Chart / Notes) */}
+          <Panel id="results-panel" minSize={25}>
+            <QueryOutput onOpenSaveEvidence={() => setShowSaveEvidenceModal(true)} />
+          </Panel>
+        </Group>
+
+        {/* History Flyout Drawer */}
+        <QueryHistory
+          isOpen={showHistory}
+          onClose={() => setShowHistory(false)}
+        />
+      </div>
+
+      {/* Save Evidence Modal Dialog */}
+      <SaveEvidenceModal
+        isOpen={showSaveEvidenceModal}
+        onClose={() => setShowSaveEvidenceModal(false)}
+      />
+    </div>
+  );
+};
