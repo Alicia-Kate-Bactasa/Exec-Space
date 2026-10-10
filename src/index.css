@@ -8,37 +8,37 @@
   --color-investigative-border-muted: var(--color-border-muted);
   --color-investigative-text: var(--color-text);
   --color-investigative-text-muted: var(--color-text-muted);
-  --color-investigative-violet: #6d28d9;
-  --color-investigative-violet-dark: #5b21b6;
-  --color-investigative-violet-accent: #7c3aed;
-  --color-investigative-violet-hover: #4c1d95;
+  --color-investigative-violet: #6c5fc7;
+  --color-investigative-violet-dark: #5a4fa8;
+  --color-investigative-violet-accent: #7e70d9;
+  --color-investigative-violet-hover: #54499e;
   --color-investigative-violet-subtle: var(--color-accent-subtle);
   --font-mono: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
   --font-sans: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 :root {
-  --color-bg: #f8f7fa;
-  --color-surface: #ffffff;
-  --color-surface-raised: #f3f0f7;
-  --color-border: #e2dfec;
-  --color-border-muted: #d0cde0;
-  --color-text: #16151f;
-  --color-text-muted: #6e6b80;
-  --color-accent-violet: #6d28d9;
-  --color-accent-subtle: rgba(109, 40, 217, 0.08);
+  --color-bg: #faf9f6;
+  --color-surface: #fffdfb;
+  --color-surface-raised: #f2efe9;
+  --color-border: #e7e1d6;
+  --color-border-muted: #cfc6b8;
+  --color-text: #2e2c29;
+  --color-text-muted: #6e675e;
+  --color-accent-violet: #6c5fc7;
+  --color-accent-subtle: rgba(108, 95, 199, 0.10);
 }
 
 [data-theme="dark"] {
-  --color-bg: #09090b;
-  --color-surface: #121017;
-  --color-surface-raised: #1c1926;
-  --color-border: #262235;
-  --color-border-muted: #38334d;
-  --color-text: #f5f4f8;
-  --color-text-muted: #9591a8;
-  --color-accent-violet: #7c3aed;
-  --color-accent-subtle: rgba(124, 58, 237, 0.16);
+  --color-bg: #141317;
+  --color-surface: #1d1c22;
+  --color-surface-raised: #26252e;
+  --color-border: #33313e;
+  --color-border-muted: #4a4759;
+  --color-text: #ece8e1;
+  --color-text-muted: #a9a29b;
+  --color-accent-violet: #8f81e8;
+  --color-accent-subtle: rgba(143, 129, 232, 0.14);
 }
 
 * {
@@ -89,7 +89,7 @@ body {
 }
 
 [data-theme="dark"] .cm-editor {
-  background-color: #0f0d14 !important;
+  background-color: #17161d !important;
 }
 
 /* Resizable panel handle */

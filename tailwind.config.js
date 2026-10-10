@@ -17,12 +17,12 @@ export default {
           text: 'var(--color-text)',
           'text-muted': 'var(--color-text-muted)',
           violet: {
-            DEFAULT: '#6d28d9',
-            accent: '#7c3aed',
-            dark: '#5b21b6',
-            hover: '#4c1d95',
-            subtle: 'rgba(109, 40, 217, 0.14)',
-            glow: 'rgba(124, 58, 237, 0.20)',
+            DEFAULT: '#6c5fc7',
+            accent: '#7e70d9',
+            dark: '#5a4fa8',
+            hover: '#54499e',
+            subtle: 'rgba(108, 95, 199, 0.12)',
+            glow: 'rgba(126, 112, 217, 0.14)',
           }
         }
       },
