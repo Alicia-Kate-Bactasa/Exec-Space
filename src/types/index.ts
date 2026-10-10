@@ -23,7 +23,7 @@ export interface CaseDefinition {
   code: string; // e.g. "Case #04"
   title: string;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  category: 'Missing Revenue' | 'Duplicate Transactions' | 'Suspicious Sales' | 'Corrupted Records' | 'Anomaly Detection';
+  category: string;
   summary: string;
   problem: string;
   objective: string;

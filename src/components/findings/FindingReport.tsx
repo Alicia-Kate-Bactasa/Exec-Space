@@ -243,7 +243,7 @@ export const FindingReport: React.FC = () => {
 
           {/* Official Ground Truth Summary (Only shown if solved) */}
           {verdict?.status === 'VERIFIED' && (
-            <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-5 text-sm space-y-2.5 animate-fadeIn">
+            <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-5 text-sm space-y-2.5">
               <div className="font-semibold text-emerald-400 flex items-center space-x-2">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Case Solution:</span>

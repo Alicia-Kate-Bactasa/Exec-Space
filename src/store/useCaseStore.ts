@@ -56,10 +56,19 @@ const getInitialTheme = (): 'dark' | 'light' => {
   return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 };
 
-// Initial state setup
+// Load persisted findings so progress survives reloads
+const getInitialFindings = (): Record<string, FindingSubmission> => {
+  try {
+    return JSON.parse(localStorage.getItem('execspace_findings') || '{}');
+  } catch {
+    return {};
+  }
+};
+
+// Initial state setup (default case is the first Beginner set)
 export const useCaseStore = create<CaseStoreState>((set, get) => ({
   cases: CASE_LIST,
-  activeCase: CASE_LIST[0], // Default to Case #04
+  activeCase: CASE_LIST[0],
   activeView: 'landing',
   currentStep: 'cases',
   currentSql: CASE_LIST[0].initialSql,
@@ -67,7 +76,7 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
   history: [],
   evidenceList: [],
   notes: {},
-  findings: {},
+  findings: getInitialFindings(),
   theme: getInitialTheme(),
   sidebarTab: 'cases',
   isExecuting: false,

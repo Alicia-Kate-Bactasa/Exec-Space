@@ -1,6 +1,9 @@
 import { CaseDefinition } from '../types';
+import { BEGINNER_CASES } from './casesBeginner';
+import { INTERMEDIATE_CASES } from './casesIntermediate';
+import { ADVANCED_CASES } from './casesAdvanced';
 
-export const CASE_LIST: CaseDefinition[] = [
+const ORIGINAL_CASES: CaseDefinition[] = [
   {
     id: 'case-04',
     code: 'Case #04',
@@ -714,3 +717,11 @@ ORDER BY hour_slot;`,
     },
   },
 ];
+
+// Combined library: 30 sets ordered by difficulty (beginner -> advanced).
+// All sets render in one go on the landing page; no pagination or staged fades.
+const BEGINNERS = [...BEGINNER_CASES, ...ORIGINAL_CASES.filter((c) => c.difficulty === 'Beginner')];
+const INTERMEDIATES = [...ORIGINAL_CASES.filter((c) => c.difficulty === 'Intermediate'), ...INTERMEDIATE_CASES];
+const ADVANCEDS = [...ORIGINAL_CASES.filter((c) => c.difficulty === 'Advanced'), ...ADVANCED_CASES];
+
+export const CASE_LIST: CaseDefinition[] = [...BEGINNERS, ...INTERMEDIATES, ...ADVANCEDS];

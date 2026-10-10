@@ -11,7 +11,7 @@ interface SqlEditorProps {
 }
 
 export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHistory }) => {
-  const { currentSql, setCurrentSql, executeQuery, isExecuting, isDbReady, history, theme } = useCaseStore();
+  const { currentSql, setCurrentSql, executeQuery, isExecuting, isDbReady, history, theme, activeCase } = useCaseStore();
 
   const handleRun = useCallback(() => {
     if (!isExecuting) {
@@ -69,6 +69,15 @@ export const SqlEditor: React.FC<SqlEditorProps> = ({ onToggleHistory, showHisto
             title="Clear editor"
           >
             Clear
+          </button>
+
+          {/* Beginner helper: restore the guided starter query */}
+          <button
+            onClick={() => setCurrentSql(activeCase.initialSql)}
+            className="px-3.5 py-1.5 rounded-full text-xs md:text-sm text-investigative-text-muted hover:text-investigative-violet hover:bg-investigative-violet-subtle border border-investigative-border/60 transition-colors"
+            title="Restore the starter query for this set"
+          >
+            Starter
           </button>
 
           {/* Hero Dark Violet Primary Run Button */}
