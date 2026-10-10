@@ -1,6 +1,7 @@
 import { CaseDefinition } from '../types';
+import { BEGINNER_CASES } from './casesBeginner';
 
-export const CASE_LIST: CaseDefinition[] = [
+const ORIGINAL_CASES: CaseDefinition[] = [
   {
     id: 'case-04',
     code: 'Case #04',
@@ -714,3 +715,7 @@ ORDER BY hour_slot;`,
     },
   },
 ];
+
+// Combined library: original investigations + beginner-friendly sets.
+// Beginners first so new learners start easy; originals follow.
+export const CASE_LIST: CaseDefinition[] = [...BEGINNER_CASES, ...ORIGINAL_CASES];
