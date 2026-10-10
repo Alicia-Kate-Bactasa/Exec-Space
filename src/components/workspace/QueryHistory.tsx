@@ -22,7 +22,7 @@ export const QueryHistory: React.FC<QueryHistoryProps> = ({ isOpen, onClose }) =
   };
 
   return (
-    <div className="absolute right-0 top-11 bottom-0 w-84 bg-investigative-surface/95 border-l border-investigative-border/60 shadow-xl z-20 flex flex-col backdrop-blur-md animate-slideLeft">
+    <div className="absolute right-0 top-11 bottom-0 w-84 bg-investigative-surface/95 border-l border-investigative-border/60 shadow-xl z-20 flex flex-col backdrop-blur-md">
       <div className="p-4 border-b border-investigative-border/50 flex items-center justify-between bg-investigative-surface-raised/30">
         <div className="flex items-center space-x-2 text-sm font-semibold text-investigative-text">
           <Clock className="w-4 h-4 text-investigative-violet" />

@@ -36,7 +36,7 @@ export const SaveEvidenceModal: React.FC<SaveEvidenceModalProps> = ({ isOpen, on
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 z-50">
       <div className="bg-investigative-surface border border-investigative-border/70 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col">
         {/* Modal Header */}
         <div className="p-4 border-b border-investigative-border/50 flex items-center justify-between bg-investigative-surface-raised/30">
