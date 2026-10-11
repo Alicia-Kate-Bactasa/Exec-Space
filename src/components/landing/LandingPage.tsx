@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
+import { useAuthStore } from '../../store/useAuthStore';
 import { Database, ArrowRight, Search, CheckCircle2 } from 'lucide-react';
 import { CaseDefinition } from '../../types';
 
@@ -55,6 +56,7 @@ const CaseCard: React.FC<{
 
 export const LandingPage: React.FC = () => {
   const { cases, selectCase, setActiveView, findings } = useCaseStore();
+  const { user, openAuth } = useAuthStore();
   const [filter, setFilter] = useState<DifficultyFilter>('All');
   const [query, setQuery] = useState('');
 
@@ -108,6 +110,22 @@ export const LandingPage: React.FC = () => {
               Pick a set below, run the starter query, pin evidence, and submit your finding.
               Your progress saves automatically.
             </p>
+            {!user && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                <button
+                  onClick={() => openAuth('signup')}
+                  className="px-5 py-2.5 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
+                >
+                  Sign up free
+                </button>
+                <button
+                  onClick={() => openAuth('login')}
+                  className="px-5 py-2.5 rounded-full border border-investigative-border/70 text-sm text-investigative-text hover:border-investigative-violet transition-colors"
+                >
+                  Log in
+                </button>
+              </div>
+            )}
             {/* Progress */}
             <div className="max-w-md">
               <div className="flex justify-between text-xs font-mono text-investigative-text-muted mb-1.5">

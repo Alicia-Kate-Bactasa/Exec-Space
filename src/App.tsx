@@ -7,6 +7,7 @@ import { Workspace } from './components/workspace/Workspace';
 import { EvidenceBoard } from './components/evidence/EvidenceBoard';
 import { FindingReport } from './components/findings/FindingReport';
 import { LandingPage } from './components/landing/LandingPage';
+import { AuthModal } from './components/auth/AuthModal';
 
 export const App: React.FC = () => {
   const { activeCase, selectCase, activeView, theme, dbError } = useCaseStore();
@@ -57,6 +58,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       )}
+      <AuthModal />
     </div>
   );
 };
