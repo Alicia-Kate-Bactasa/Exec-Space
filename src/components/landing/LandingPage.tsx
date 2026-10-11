@@ -54,6 +54,43 @@ const CaseCard: React.FC<{
   </div>
 );
 
+const STEPS = [
+  { n: '1', t: 'Pick a set', d: 'Start with Beginner. Each set is one clear question.' },
+  { n: '2', t: 'Run & explore', d: 'Press Run on the starter query, then tweak it.' },
+  { n: '3', t: 'Pin & solve', d: 'Save evidence, then submit your finding.' },
+];
+
+const CasesSection: React.FC<{
+  visible: CaseDefinition[];
+  groups: { title: string; hint: string; items: CaseDefinition[] }[];
+  query: string;
+  isSolved: (id: string) => boolean;
+  onStart: (id: string) => void;
+}> = ({ visible, groups, query, isSolved, onStart }) => (
+  <section id="cases-section" className="px-6 pb-12 max-w-5xl mx-auto">
+    {visible.length === 0 && (
+      <div className="p-8 text-center border border-dashed border-investigative-border/60 rounded-3xl text-sm text-investigative-text-muted">
+        No sets match “{query}”. Try clearing the search or picking another level.
+      </div>
+    )}
+    {groups.map((g) =>
+      g.items.length > 0 ? (
+        <div key={g.title} className="mb-10">
+          <div className="flex items-baseline justify-between mb-4">
+            <h2 className="text-lg font-light tracking-tight">{g.title}</h2>
+            <span className="text-xs font-mono text-investigative-text-muted">{g.hint} · {g.items.length} sets</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {g.items.map((c) => (
+              <CaseCard key={c.id} c={c} solved={isSolved(c.id)} onStart={onStart} />
+            ))}
+          </div>
+        </div>
+      ) : null
+    )}
+  </section>
+);
+
 export const LandingPage: React.FC = () => {
   const { cases, selectCase, setActiveView, findings } = useCaseStore();
   const { user, openAuth } = useAuthStore();
@@ -87,6 +124,71 @@ export const LandingPage: React.FC = () => {
     ];
   }, [visible, filter, cases.length]);
 
+  // Logged-out guests see no hero: a short app description plus
+  // how-it-works and case-browser sections, with auth entry points.
+  if (!user) {
+    return (
+      <div className="h-full overflow-y-auto bg-investigative-bg text-investigative-text select-none">
+        {/* Section 1 — What ExecSpace does */}
+        <section className="px-6 pt-12 pb-10 max-w-5xl mx-auto text-left">
+          <div className="text-xs font-mono text-investigative-violet mb-2">What is ExecSpace?</div>
+          <h1 className="text-2xl sm:text-3xl font-light tracking-tight mb-3 leading-snug">
+            Learn SQL by solving bite-size database mysteries.
+          </h1>
+          <p className="text-sm sm:text-base text-investigative-text-muted leading-relaxed font-light mb-4 max-w-2xl">
+            ExecSpace is a hands-on database investigation platform. You run real SQL queries
+            right in your browser across 30 guided case sets — from basic SELECT and WHERE up
+            to joins, aggregates, and window functions. Pin interesting results as evidence,
+            then submit your finding to check your answer. Your progress saves automatically.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => openAuth('signup')}
+              className="px-5 py-2.5 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
+            >
+              Sign up free
+            </button>
+            <button
+              onClick={() => openAuth('login')}
+              className="px-5 py-2.5 rounded-full border border-investigative-border/70 text-sm text-investigative-text hover:border-investigative-violet transition-colors"
+            >
+              Log in
+            </button>
+          </div>
+        </section>
+
+        {/* Section 2 — How it works */}
+        <section className="px-6 pb-10 max-w-5xl mx-auto">
+          <h2 className="text-lg font-light tracking-tight mb-4">How it works</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {STEPS.map((s) => (
+              <div key={s.n} className="p-5 rounded-2xl bg-investigative-surface border border-investigative-border/60">
+                <div className="w-8 h-8 rounded-full bg-investigative-violet-subtle border border-investigative-violet/30 flex items-center justify-center text-investigative-violet font-semibold text-xs mb-2">
+                  {s.n}
+                </div>
+                <h3 className="text-sm font-medium mb-1">{s.t}</h3>
+                <p className="text-xs font-light text-investigative-text-muted leading-relaxed">{s.d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 3 — Browse the case sets */}
+        <div className="px-6 max-w-5xl mx-auto">
+          <h2 className="text-lg font-light tracking-tight mb-1">Browse the case sets</h2>
+          <p className="text-xs font-light text-investigative-text-muted mb-4">
+            Log in or sign up to track your progress — or jump straight into a set below.
+          </p>
+        </div>
+        <CasesSection visible={visible} groups={groups} query={query} isSolved={isSolved} onStart={handleStartCase} />
+
+        <footer className="py-8 px-6 border-t border-investigative-border/40 text-center text-xs text-investigative-text-muted font-mono">
+          ExecSpace — 30 gentle database investigations for beginners
+        </footer>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full overflow-y-auto bg-investigative-bg text-investigative-text select-none">
       {/* HERO — minimal, no glow, no staged animation */}
@@ -110,22 +212,6 @@ export const LandingPage: React.FC = () => {
               Pick a set below, run the starter query, pin evidence, and submit your finding.
               Your progress saves automatically.
             </p>
-            {!user && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                <button
-                  onClick={() => openAuth('signup')}
-                  className="px-5 py-2.5 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
-                >
-                  Sign up free
-                </button>
-                <button
-                  onClick={() => openAuth('login')}
-                  className="px-5 py-2.5 rounded-full border border-investigative-border/70 text-sm text-investigative-text hover:border-investigative-violet transition-colors"
-                >
-                  Log in
-                </button>
-              </div>
-            )}
             {/* Progress */}
             <div className="max-w-md">
               <div className="flex justify-between text-xs font-mono text-investigative-text-muted mb-1.5">
@@ -144,11 +230,7 @@ export const LandingPage: React.FC = () => {
 
         {/* 3 minimal steps */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
-          {[
-            { n: '1', t: 'Pick a set', d: 'Start with Beginner. Each set is one clear question.' },
-            { n: '2', t: 'Run & explore', d: 'Press Run on the starter query, then tweak it.' },
-            { n: '3', t: 'Pin & solve', d: 'Save evidence, then submit your finding.' },
-          ].map((s) => (
+          {STEPS.map((s) => (
             <div key={s.n} className="p-5 rounded-2xl bg-investigative-surface border border-investigative-border/60">
               <div className="w-8 h-8 rounded-full bg-investigative-violet-subtle border border-investigative-violet/30 flex items-center justify-center text-investigative-violet font-semibold text-xs mb-2">
                 {s.n}
@@ -189,28 +271,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* ALL CASES — rendered in one go, grouped by level, no pagination */}
-      <section id="cases-section" className="px-6 pb-12 max-w-5xl mx-auto">
-        {visible.length === 0 && (
-          <div className="p-8 text-center border border-dashed border-investigative-border/60 rounded-3xl text-sm text-investigative-text-muted">
-            No sets match “{query}”. Try clearing the search or picking another level.
-          </div>
-        )}
-        {groups.map((g) =>
-          g.items.length > 0 ? (
-            <div key={g.title} className="mb-10">
-              <div className="flex items-baseline justify-between mb-4">
-                <h2 className="text-lg font-light tracking-tight">{g.title}</h2>
-                <span className="text-xs font-mono text-investigative-text-muted">{g.hint} · {g.items.length} sets</span>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {g.items.map((c) => (
-                  <CaseCard key={c.id} c={c} solved={isSolved(c.id)} onStart={handleStartCase} />
-                ))}
-              </div>
-            </div>
-          ) : null
-        )}
-      </section>
+      <CasesSection visible={visible} groups={groups} query={query} isSolved={isSolved} onStart={handleStartCase} />
 
       <footer className="py-8 px-6 border-t border-investigative-border/40 text-center text-xs text-investigative-text-muted font-mono">
         ExecSpace — 30 gentle database investigations for beginners

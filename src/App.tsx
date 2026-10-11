@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useCaseStore } from './store/useCaseStore';
+import { useAuthStore } from './store/useAuthStore';
 import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { LineageBar } from './components/layout/LineageBar';
@@ -11,6 +12,7 @@ import { AuthModal } from './components/auth/AuthModal';
 
 export const App: React.FC = () => {
   const { activeCase, selectCase, activeView, theme, dbError } = useCaseStore();
+  const user = useAuthStore((s) => s.user);
 
   // Initialize PGlite database on initial mount
   useEffect(() => {
@@ -24,8 +26,8 @@ export const App: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen w-screen bg-investigative-bg text-investigative-text overflow-hidden font-sans">
-      {/* Top Application Header */}
-      <Header />
+      {/* Top Application Header — visible to logged-in users only */}
+      {user && <Header />}
 
       {/* Main Content Area */}
       {activeView === 'landing' ? (
