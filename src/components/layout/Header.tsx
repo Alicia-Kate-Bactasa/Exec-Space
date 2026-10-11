@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
-import { Moon, Sun, RotateCcw, Home, BookOpen, BookmarkCheck, FileText } from 'lucide-react';
+import { useAuthStore } from '../../store/useAuthStore';
+import { Moon, Sun, RotateCcw, Home, BookOpen, BookmarkCheck, FileText, LogIn, UserPlus, LogOut } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { activeView, setActiveView, evidenceList, theme, toggleTheme, resetCurrentCase } = useCaseStore();
+  const { user, openAuth, logOut } = useAuthStore();
   const [logoError, setLogoError] = useState(false);
 
   return (
@@ -100,6 +102,44 @@ export const Header: React.FC = () => {
 
       {/* Minimalist Actions */}
       <div className="flex items-center space-x-2">
+        {user ? (
+          <>
+            <span
+              title={user.email}
+              className="hidden md:flex items-center gap-2 pl-1.5 pr-3.5 py-1.5 rounded-full bg-investigative-surface-raised/60 border border-investigative-border/60 text-sm"
+            >
+              <span className="w-7 h-7 rounded-full bg-investigative-violet text-white flex items-center justify-center text-xs font-semibold">
+                {user.name.charAt(0).toUpperCase()}
+              </span>
+              <span className="max-w-28 truncate font-light">{user.name}</span>
+            </span>
+            <button
+              onClick={logOut}
+              className="flex items-center space-x-1.5 px-3.5 py-2 rounded-full text-sm text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised/60 transition-colors"
+              title={`Log out (${user.email})`}
+            >
+              <LogOut className="w-4 h-4" />
+              <span className="hidden sm:inline font-light">Log out</span>
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => openAuth('login')}
+              className="flex items-center space-x-1.5 px-3.5 py-2 rounded-full text-sm text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised/60 transition-colors"
+            >
+              <LogIn className="w-4 h-4" />
+              <span className="hidden sm:inline font-light">Log in</span>
+            </button>
+            <button
+              onClick={() => openAuth('signup')}
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-full text-sm bg-investigative-violet text-white hover:bg-investigative-violet-hover transition-colors font-medium"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span className="hidden sm:inline">Sign up</span>
+            </button>
+          </>
+        )}
         <button
           onClick={resetCurrentCase}
           className="flex items-center space-x-1.5 px-3.5 py-2 rounded-full text-sm text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised/60 transition-colors"
