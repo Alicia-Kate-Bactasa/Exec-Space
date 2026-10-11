@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Database, ArrowRight, Search, CheckCircle2 } from 'lucide-react';
+import { Database, ArrowRight, Search, CheckCircle2, Terminal, Pin, Trophy } from 'lucide-react';
 import { CaseDefinition } from '../../types';
 
 type DifficultyFilter = 'All' | 'Beginner' | 'Intermediate' | 'Advanced';
@@ -67,7 +67,7 @@ const CasesSection: React.FC<{
   isSolved: (id: string) => boolean;
   onStart: (id: string) => void;
 }> = ({ visible, groups, query, isSolved, onStart }) => (
-  <section id="cases-section" className="px-6 pb-12 max-w-5xl mx-auto">
+  <section id="cases-section" className="px-6 pb-12 max-w-6xl mx-auto">
     {visible.length === 0 && (
       <div className="p-8 text-center border border-dashed border-investigative-border/60 rounded-3xl text-sm text-investigative-text-muted">
         No sets match “{query}”. Try clearing the search or picking another level.
@@ -124,46 +124,117 @@ export const LandingPage: React.FC = () => {
     ];
   }, [visible, filter, cases.length]);
 
-  // Logged-out guests see no hero: a short app description plus
-  // how-it-works and case-browser sections, with auth entry points.
+  // Logged-out guests get a persuasive landing page: no hero grid, no case
+  // list — just what the app is, how it works, and clear calls to action.
   if (!user) {
+    const levelCards = [
+      { level: 'Beginner' as const, skill: 'SELECT, WHERE, GROUP BY', blurb: 'No experience needed. Each set asks one clear question and walks you through the query.' },
+      { level: 'Intermediate' as const, skill: 'Joins, aggregates, anomalies', blurb: 'Connect tables, spot the numbers that don’t add up, and build the case.' },
+      { level: 'Advanced' as const, skill: 'Windows, CTEs, dedup logic', blurb: 'For when you’re ready: layered queries and tricky data-quality puzzles.' },
+    ];
+    const countFor = (level: string) => cases.filter((c) => c.difficulty === level).length;
+
     return (
       <div className="h-full overflow-y-auto bg-investigative-bg text-investigative-text select-none">
-        {/* Section 1 — What ExecSpace does */}
-        <section className="px-6 pt-12 pb-10 max-w-5xl mx-auto text-left">
-          <div className="text-xs font-mono text-investigative-violet mb-2">What is ExecSpace?</div>
-          <h1 className="text-2xl sm:text-3xl font-light tracking-tight mb-3 leading-snug">
-            Learn SQL by solving bite-size database mysteries.
+        {/* Guest header bar — brand + auth CTAs (app Header stays login-only) */}
+        <div className="sticky top-0 z-10 bg-investigative-bg/90 backdrop-blur-md border-b border-investigative-border/40">
+          <div className="max-w-6xl mx-auto px-6 py-3.5 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <img
+                src="/ExecSpaceLogo.png"
+                alt="ExecSpace Logo"
+                className="h-8 w-auto object-contain"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (!target.src.includes('/assets/')) target.src = '/assets/ExecSpaceLogo.png';
+                }}
+              />
+              <span className="text-lg font-light tracking-wide">ExecSpace</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => openAuth('login')}
+                className="px-4 py-2 rounded-full text-sm text-investigative-text-muted hover:text-investigative-text transition-colors"
+              >
+                Log in
+              </button>
+              <button
+                onClick={() => openAuth('signup')}
+                className="px-5 py-2 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
+              >
+                Sign up free
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 1 — Hero: what ExecSpace is + primary CTA */}
+        <section className="px-6 pt-16 pb-14 max-w-6xl mx-auto text-center">
+          <h1 className="text-3xl sm:text-5xl font-light tracking-tight mb-4 leading-tight">
+            Learn SQL by solving<br className="hidden sm:block" /> database mysteries.
           </h1>
-          <p className="text-sm sm:text-base text-investigative-text-muted leading-relaxed font-light mb-4 max-w-2xl">
-            ExecSpace is a hands-on database investigation platform. You run real SQL queries
-            right in your browser across 30 guided case sets — from basic SELECT and WHERE up
-            to joins, aggregates, and window functions. Pin interesting results as evidence,
-            then submit your finding to check your answer. Your progress saves automatically.
+          <p className="text-sm sm:text-lg text-investigative-text-muted leading-relaxed font-light mb-8 max-w-2xl mx-auto">
+            ExecSpace turns practice queries into detective work. Run real SQL against
+            realistic datasets, pin your evidence, and prove your finding — easiest
+            case first, no setup required.
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap justify-center gap-3 mb-10">
             <button
               onClick={() => openAuth('signup')}
-              className="px-5 py-2.5 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
+              className="flex items-center gap-2 px-7 py-3 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
             >
               Sign up free
+              <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => openAuth('login')}
-              className="px-5 py-2.5 rounded-full border border-investigative-border/70 text-sm text-investigative-text hover:border-investigative-violet transition-colors"
+              className="px-7 py-3 rounded-full border border-investigative-border/70 text-sm text-investigative-text hover:border-investigative-violet transition-colors"
             >
               Log in
             </button>
           </div>
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs font-mono text-investigative-text-muted">
+            <span>{cases.length} case sets</span>
+            <span>3 difficulty levels</span>
+            <span>Zero install</span>
+            <span>Progress auto-saved</span>
+          </div>
         </section>
 
-        {/* Section 2 — How it works */}
-        <section className="px-6 pb-10 max-w-5xl mx-auto">
-          <h2 className="text-lg font-light tracking-tight mb-4">How it works</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {/* Section 2 — What you get */}
+        <section className="px-6 py-14 max-w-6xl mx-auto">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-2 text-center">Everything you need to learn by doing</h2>
+          <p className="text-sm text-investigative-text-muted font-light mb-8 text-center max-w-xl mx-auto">
+            No tutorials to watch, no database to install. Just open a case and start querying.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { icon: Terminal, t: 'Real SQL, zero setup', d: 'Queries run in your browser against an in-memory database. Nothing to install, ever.' },
+              { icon: Search, t: 'Mysteries, not exercises', d: 'Each set is a small story — failed orders, refund spikes, duplicate rows — with one clear question to answer.' },
+              { icon: Pin, t: 'Pin your evidence', d: 'Save the query results that matter onto your evidence board as you investigate.' },
+              { icon: Trophy, t: 'Prove your finding', d: 'Submit your culprit and explanation for instant feedback, and watch your solved count grow.' },
+            ].map((f) => (
+              <div key={f.t} className="p-6 rounded-3xl bg-investigative-surface border border-investigative-border/60">
+                <div className="w-10 h-10 rounded-2xl bg-investigative-violet-subtle border border-investigative-violet/30 flex items-center justify-center text-investigative-violet mb-3">
+                  <f.icon className="w-5 h-5" />
+                </div>
+                <h3 className="text-sm font-medium mb-1.5">{f.t}</h3>
+                <p className="text-xs font-light text-investigative-text-muted leading-relaxed">{f.d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 3 — How it works */}
+        <section className="px-6 py-14 max-w-6xl mx-auto">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-2 text-center">How it works</h2>
+          <p className="text-sm text-investigative-text-muted font-light mb-8 text-center max-w-xl mx-auto">
+            Three steps, repeated across every case — the same loop real analysts run.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {STEPS.map((s) => (
-              <div key={s.n} className="p-5 rounded-2xl bg-investigative-surface border border-investigative-border/60">
-                <div className="w-8 h-8 rounded-full bg-investigative-violet-subtle border border-investigative-violet/30 flex items-center justify-center text-investigative-violet font-semibold text-xs mb-2">
+              <div key={s.n} className="p-6 rounded-3xl bg-investigative-surface border border-investigative-border/60">
+                <div className="w-9 h-9 rounded-full bg-investigative-violet text-white flex items-center justify-center font-semibold text-sm mb-3">
                   {s.n}
                 </div>
                 <h3 className="text-sm font-medium mb-1">{s.t}</h3>
@@ -173,14 +244,59 @@ export const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Section 3 — Browse the case sets */}
-        <div className="px-6 max-w-5xl mx-auto">
-          <h2 className="text-lg font-light tracking-tight mb-1">Browse the case sets</h2>
-          <p className="text-xs font-light text-investigative-text-muted mb-4">
-            Log in or sign up to track your progress — or jump straight into a set below.
+        {/* Section 4 — Learning path, no case list */}
+        <section className="px-6 py-14 max-w-6xl mx-auto">
+          <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-2 text-center">A path from first query to confident</h2>
+          <p className="text-sm text-investigative-text-muted font-light mb-8 text-center max-w-xl mx-auto">
+            Cases unlock in order of difficulty, so you always know what to try next.
           </p>
-        </div>
-        <CasesSection visible={visible} groups={groups} query={query} isSolved={isSolved} onStart={handleStartCase} />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {levelCards.map((l) => (
+              <div key={l.level} className="p-6 rounded-3xl bg-investigative-surface border border-investigative-border/60 flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-medium">{l.level}</span>
+                  <span className="text-xs font-mono text-investigative-text-muted">{countFor(l.level)} sets</span>
+                </div>
+                <div className="text-xs font-mono text-investigative-violet mb-2">{l.skill}</div>
+                <p className="text-xs font-light text-investigative-text-muted leading-relaxed mb-5 flex-1">{l.blurb}</p>
+                <button
+                  onClick={() => openAuth('signup')}
+                  className="w-full py-2.5 rounded-full border border-investigative-border/70 text-xs font-medium hover:border-investigative-violet hover:text-investigative-violet transition-colors"
+                >
+                  Start here
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 5 — Detached call-to-action card */}
+        <section className="px-6 pb-16 max-w-6xl mx-auto">
+          <div className="rounded-3xl border border-investigative-violet/30 bg-investigative-violet-subtle px-6 py-12 sm:px-12 text-center">
+            <h2 className="text-xl sm:text-3xl font-light tracking-tight mb-3">
+              Your first mystery is waiting.
+            </h2>
+            <p className="text-sm text-investigative-text-muted font-light mb-7 max-w-lg mx-auto">
+              Create a free account to save your progress across all 30 case sets —
+              or log in to pick up exactly where you left off.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <button
+                onClick={() => openAuth('signup')}
+                className="flex items-center gap-2 px-7 py-3 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
+              >
+                Sign up free
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => openAuth('login')}
+                className="px-7 py-3 rounded-full border border-investigative-violet/40 text-sm text-investigative-text hover:border-investigative-violet transition-colors"
+              >
+                Log in
+              </button>
+            </div>
+          </div>
+        </section>
 
         <footer className="py-8 px-6 border-t border-investigative-border/40 text-center text-xs text-investigative-text-muted font-mono">
           ExecSpace — 30 gentle database investigations for beginners
@@ -192,7 +308,7 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="h-full overflow-y-auto bg-investigative-bg text-investigative-text select-none">
       {/* HERO — minimal, no glow, no staged animation */}
-      <section className="px-6 pt-12 pb-10 max-w-5xl mx-auto text-left">
+      <section className="px-6 pt-12 pb-10 max-w-6xl mx-auto text-left">
         <div className="flex items-start gap-5 mb-8">
           <img
             src="/ExecSpaceLogo.png"
