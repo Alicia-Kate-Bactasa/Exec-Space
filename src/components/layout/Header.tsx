@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Moon, Sun, RotateCcw, Home, BookOpen, BookmarkCheck, FileText, LogIn, UserPlus, LogOut, User } from 'lucide-react';
+import { Moon, Sun, RotateCcw, Home, BookOpen, BookmarkCheck, FileText, LogIn, UserPlus, LogOut, User, CircleHelp } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { activeView, setActiveView, evidenceList, theme, toggleTheme, resetCurrentCase } = useCaseStore();
@@ -112,6 +112,19 @@ export const Header: React.FC = () => {
             <span>Profile</span>
           </button>
         )}
+
+        <button
+          onClick={() => setActiveView('help')}
+          className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm transition-all duration-150 ${
+            activeView === 'help'
+              ? 'bg-investigative-violet text-white font-normal shadow-xs'
+              : 'text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised/60'
+          }`}
+          title="Open help page"
+        >
+          <CircleHelp className="w-4 h-4" />
+          <span>Help</span>
+        </button>
       </nav>
 
       {/* Minimalist Actions */}
