@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { Visualization } from './Visualization';
 import { InvestigationNotes } from '../notes/InvestigationNotes';
-import { BookmarkPlus, Table, BarChart3, Edit3, AlertCircle } from 'lucide-react';
+import { BookmarkPlus, Table, BarChart3, Edit3, AlertCircle, Copy, Check } from 'lucide-react';
 
 interface QueryOutputProps {
   onOpenSaveEvidence: () => void;
@@ -11,8 +11,28 @@ interface QueryOutputProps {
 export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) => {
   const { currentResult, isExecuting } = useCaseStore();
   const [activeTab, setActiveTab] = useState<'table' | 'chart' | 'notes'>('table');
+  const [copied, setCopied] = useState(false);
 
   const hasData = currentResult && !currentResult.error && currentResult.rows.length > 0;
+
+  const copyAsCsv = async () => {
+    if (!hasData || !currentResult) return;
+
+    const escapeCell = (value: string | number | boolean | null) => {
+      if (value === null || value === undefined) return '';
+      const text = String(value);
+      return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+    };
+
+    const lines = [
+      currentResult.columns.map(escapeCell).join(','),
+      ...currentResult.rows.map((row) => row.map(escapeCell).join(',')),
+    ];
+
+    await navigator.clipboard.writeText(lines.join('\n'));
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1600);
+  };
 
   return (
     <div className="h-full flex flex-col bg-investigative-surface/70 overflow-hidden">
@@ -71,6 +91,16 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
               )}
             </div>
           )}
+
+          <button
+            onClick={copyAsCsv}
+            disabled={!hasData || isExecuting}
+            className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-sm border border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text hover:border-investigative-violet hover:bg-investigative-violet-subtle transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            title="Copy result as CSV"
+          >
+            {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+            <span>{copied ? 'Copied' : 'Copy CSV'}</span>
+          </button>
 
           <button
             onClick={onOpenSaveEvidence}
