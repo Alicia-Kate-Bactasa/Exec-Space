@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Moon, Sun, RotateCcw, Home, BookOpen, BookmarkCheck, FileText, LogIn, UserPlus, LogOut } from 'lucide-react';
+import { Moon, Sun, RotateCcw, Home, BookOpen, BookmarkCheck, FileText, LogIn, UserPlus, LogOut, User } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { activeView, setActiveView, evidenceList, theme, toggleTheme, resetCurrentCase } = useCaseStore();
@@ -98,21 +98,37 @@ export const Header: React.FC = () => {
           <FileText className="w-4 h-4" />
           <span>Finding</span>
         </button>
+
+        {user && (
+          <button
+            onClick={() => setActiveView('profile')}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm transition-all duration-150 ${
+              activeView === 'profile'
+                ? 'bg-investigative-violet text-white font-normal shadow-xs'
+                : 'text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised/60'
+            }`}
+          >
+            <User className="w-4 h-4" />
+            <span>Profile</span>
+          </button>
+        )}
       </nav>
 
       {/* Minimalist Actions */}
       <div className="flex items-center space-x-2">
         {user ? (
           <>
-            <span
+            <button
+              type="button"
+              onClick={() => setActiveView('profile')}
               title={user.email}
-              className="hidden md:flex items-center gap-2 pl-1.5 pr-3.5 py-1.5 rounded-full bg-investigative-surface-raised/60 border border-investigative-border/60 text-sm"
+              className="hidden md:flex items-center gap-2 pl-1.5 pr-3.5 py-1.5 rounded-full bg-investigative-surface-raised/60 border border-investigative-border/60 text-sm cursor-pointer hover:bg-investigative-surface-raised transition-colors"
             >
               <span className="w-7 h-7 rounded-full bg-investigative-violet text-white flex items-center justify-center text-xs font-semibold">
                 {user.name.charAt(0).toUpperCase()}
               </span>
               <span className="max-w-28 truncate font-light">{user.name}</span>
-            </span>
+            </button>
             <button
               onClick={logOut}
               className="flex items-center space-x-1.5 px-3.5 py-2 rounded-full text-sm text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised/60 transition-colors"
