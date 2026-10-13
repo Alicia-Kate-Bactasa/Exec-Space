@@ -23,6 +23,7 @@ interface CaseStoreState {
   notes: Record<string, string>;
   findings: Record<string, FindingSubmission>;
   theme: 'dark' | 'light';
+  headerCollapsed: boolean;
   sidebarTab: 'cases' | 'database';
   isExecuting: boolean;
   isDbReady: boolean;
@@ -46,6 +47,7 @@ interface CaseStoreState {
     selectedEvidenceIds: string[];
   }) => FindingSubmission;
   toggleTheme: () => void;
+  toggleHeaderCollapsed: () => void;
   resetCurrentCase: () => Promise<void>;
 }
 
@@ -65,6 +67,14 @@ const getInitialFindings = (): Record<string, FindingSubmission> => {
   }
 };
 
+const getInitialHeaderCollapsed = (): boolean => {
+  try {
+    return localStorage.getItem('execspace_header_collapsed') === 'true';
+  } catch {
+    return false;
+  }
+};
+
 // Initial state setup (default case is the first Beginner set)
 export const useCaseStore = create<CaseStoreState>((set, get) => ({
   cases: CASE_LIST,
@@ -78,6 +88,7 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
   notes: {},
   findings: getInitialFindings(),
   theme: getInitialTheme(),
+  headerCollapsed: getInitialHeaderCollapsed(),
   sidebarTab: 'cases',
   isExecuting: false,
   isDbReady: false,
@@ -219,6 +230,12 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
     localStorage.setItem('execspace_theme', nextTheme);
     document.documentElement.setAttribute('data-theme', nextTheme);
     set({ theme: nextTheme });
+  },
+
+  toggleHeaderCollapsed: () => {
+    const next = !get().headerCollapsed;
+    localStorage.setItem('execspace_header_collapsed', String(next));
+    set({ headerCollapsed: next });
   },
 
   resetCurrentCase: async () => {
