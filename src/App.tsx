@@ -10,6 +10,7 @@ import { FindingReport } from './components/findings/FindingReport';
 import { LandingPage } from './components/landing/LandingPage';
 import { AuthModal } from './components/auth/AuthModal';
 import { ProfilePage } from './components/profile/ProfilePage';
+import { HelpPage } from './components/help/HelpPage';
 
 export const App: React.FC = () => {
   const { activeCase, selectCase, activeView, theme, dbError } = useCaseStore();
@@ -34,6 +35,10 @@ export const App: React.FC = () => {
       {activeView === 'landing' ? (
         <main className="flex-1 min-h-0 overflow-hidden">
           <LandingPage />
+        </main>
+      ) : activeView === 'help' ? (
+        <main className="flex-1 min-h-0 overflow-hidden">
+          <HelpPage />
         </main>
       ) : activeView === 'profile' ? (
         <main className="flex-1 min-h-0 overflow-hidden">

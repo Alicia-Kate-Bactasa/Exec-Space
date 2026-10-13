@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Database, ArrowRight, Search, CheckCircle2, Terminal, Pin, Trophy } from 'lucide-react';
+import { Database, ArrowRight, Search, CheckCircle2, Terminal, Pin, Trophy, CircleHelp } from 'lucide-react';
 import { CaseDefinition } from '../../types';
 
 type DifficultyFilter = 'All' | 'Beginner' | 'Intermediate' | 'Advanced';
@@ -92,7 +92,7 @@ const CasesSection: React.FC<{
 );
 
 export const LandingPage: React.FC = () => {
-  const { cases, selectCase, setActiveView, findings } = useCaseStore();
+  const { cases, selectCase, setActiveView, findings, lastCaseId, lastWorkView } = useCaseStore();
   const { user, openAuth } = useAuthStore();
   const [filter, setFilter] = useState<DifficultyFilter>('All');
   const [query, setQuery] = useState('');
@@ -104,6 +104,13 @@ export const LandingPage: React.FC = () => {
 
   const isSolved = (id: string) => findings[id]?.verdict?.status === 'VERIFIED';
   const solvedCount = cases.filter((c) => isSolved(c.id)).length;
+  const lastCase = useMemo(() => cases.find((c) => c.id === lastCaseId) || null, [cases, lastCaseId]);
+
+  const handleResume = async () => {
+    if (!lastCase) return;
+    await selectCase(lastCase.id);
+    setActiveView(lastWorkView);
+  };
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -152,6 +159,14 @@ export const LandingPage: React.FC = () => {
               <span className="text-lg font-light tracking-wide">ExecSpace</span>
             </div>
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => setActiveView('help')}
+                className="w-9 h-9 rounded-full border border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text hover:border-investigative-violet transition-colors flex items-center justify-center"
+                title="How to use ExecSpace"
+                aria-label="How to use ExecSpace"
+              >
+                <CircleHelp className="w-4 h-4" />
+              </button>
               <button
                 onClick={() => openAuth('login')}
                 className="px-4 py-2 rounded-full text-sm text-investigative-text-muted hover:text-investigative-text transition-colors"
@@ -341,6 +356,15 @@ export const LandingPage: React.FC = () => {
                 />
               </div>
             </div>
+            {lastCase && (
+              <button
+                onClick={handleResume}
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-investigative-border/70 text-sm text-investigative-text-muted hover:text-investigative-text hover:border-investigative-violet transition-colors"
+              >
+                Continue {lastCase.code}
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
