@@ -24,6 +24,8 @@ interface CaseStoreState {
   findings: Record<string, FindingSubmission>;
   theme: 'dark' | 'light';
   headerCollapsed: boolean;
+  lastCaseId: string | null;
+  lastWorkView: Extract<ActiveView, 'workspace' | 'evidence' | 'finding'>;
   sidebarTab: 'cases' | 'database';
   isExecuting: boolean;
   isDbReady: boolean;
@@ -75,6 +77,23 @@ const getInitialHeaderCollapsed = (): boolean => {
   }
 };
 
+const getInitialLastCaseId = (): string | null => {
+  try {
+    return localStorage.getItem('execspace_last_case_id');
+  } catch {
+    return null;
+  }
+};
+
+const getInitialLastWorkView = (): Extract<ActiveView, 'workspace' | 'evidence' | 'finding'> => {
+  try {
+    const saved = localStorage.getItem('execspace_last_work_view');
+    return saved === 'evidence' || saved === 'finding' ? saved : 'workspace';
+  } catch {
+    return 'workspace';
+  }
+};
+
 // Initial state setup (default case is the first Beginner set)
 export const useCaseStore = create<CaseStoreState>((set, get) => ({
   cases: CASE_LIST,
@@ -89,6 +108,8 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
   findings: getInitialFindings(),
   theme: getInitialTheme(),
   headerCollapsed: getInitialHeaderCollapsed(),
+  lastCaseId: getInitialLastCaseId(),
+  lastWorkView: getInitialLastWorkView(),
   sidebarTab: 'cases',
   isExecuting: false,
   isDbReady: false,
@@ -106,7 +127,9 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
       dbError: null,
       currentStep: 'schema',
       sidebarTab: 'database',
+      lastCaseId: selected.id,
     });
+    localStorage.setItem('execspace_last_case_id', selected.id);
 
     try {
       await dbManager.initCase(selected.id, selected.dbSchemaSql);
@@ -116,7 +139,14 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
     }
   },
 
-  setActiveView: (view: ActiveView) => set({ activeView: view }),
+  setActiveView: (view: ActiveView) => {
+    if (view === 'workspace' || view === 'evidence' || view === 'finding') {
+      localStorage.setItem('execspace_last_work_view', view);
+      set({ activeView: view, lastWorkView: view });
+      return;
+    }
+    set({ activeView: view });
+  },
 
   setCurrentStep: (step: InvestigationStep) => set({ currentStep: step }),
 

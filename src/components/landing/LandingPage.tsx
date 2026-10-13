@@ -92,7 +92,7 @@ const CasesSection: React.FC<{
 );
 
 export const LandingPage: React.FC = () => {
-  const { cases, selectCase, setActiveView, findings } = useCaseStore();
+  const { cases, selectCase, setActiveView, findings, lastCaseId, lastWorkView } = useCaseStore();
   const { user, openAuth } = useAuthStore();
   const [filter, setFilter] = useState<DifficultyFilter>('All');
   const [query, setQuery] = useState('');
@@ -104,6 +104,13 @@ export const LandingPage: React.FC = () => {
 
   const isSolved = (id: string) => findings[id]?.verdict?.status === 'VERIFIED';
   const solvedCount = cases.filter((c) => isSolved(c.id)).length;
+  const lastCase = useMemo(() => cases.find((c) => c.id === lastCaseId) || null, [cases, lastCaseId]);
+
+  const handleResume = async () => {
+    if (!lastCase) return;
+    await selectCase(lastCase.id);
+    setActiveView(lastWorkView);
+  };
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -349,6 +356,15 @@ export const LandingPage: React.FC = () => {
                 />
               </div>
             </div>
+            {lastCase && (
+              <button
+                onClick={handleResume}
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-investigative-border/70 text-sm text-investigative-text-muted hover:text-investigative-text hover:border-investigative-violet transition-colors"
+              >
+                Continue {lastCase.code}
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 
