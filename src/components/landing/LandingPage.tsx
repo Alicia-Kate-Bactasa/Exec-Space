@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Database, ArrowRight, Search, CheckCircle2, Terminal, Pin, Trophy } from 'lucide-react';
+import { Database, ArrowRight, Search, CheckCircle2, Terminal, Pin, Trophy, CircleHelp } from 'lucide-react';
 import { CaseDefinition } from '../../types';
 
 type DifficultyFilter = 'All' | 'Beginner' | 'Intermediate' | 'Advanced';
@@ -152,6 +152,14 @@ export const LandingPage: React.FC = () => {
               <span className="text-lg font-light tracking-wide">ExecSpace</span>
             </div>
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => setActiveView('help')}
+                className="w-9 h-9 rounded-full border border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text hover:border-investigative-violet transition-colors flex items-center justify-center"
+                title="How to use ExecSpace"
+                aria-label="How to use ExecSpace"
+              >
+                <CircleHelp className="w-4 h-4" />
+              </button>
               <button
                 onClick={() => openAuth('login')}
                 className="px-4 py-2 rounded-full text-sm text-investigative-text-muted hover:text-investigative-text transition-colors"
