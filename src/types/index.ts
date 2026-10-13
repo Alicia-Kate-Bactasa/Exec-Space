@@ -1,6 +1,6 @@
 export type InvestigationStep = 'cases' | 'schema' | 'query' | 'results' | 'evidence' | 'finding';
 
-export type ActiveView = 'landing' | 'workspace' | 'evidence' | 'finding';
+export type ActiveView = 'landing' | 'workspace' | 'evidence' | 'finding' | 'profile';
 
 export interface ColumnDefinition {
   name: string;
