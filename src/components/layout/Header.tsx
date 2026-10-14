@@ -1,23 +1,17 @@
 import React, { useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Home, BookOpen, BookmarkCheck, FileText, LogIn, UserPlus } from 'lucide-react';
+import { ArrowLeft, LogIn, UserPlus } from 'lucide-react';
 import { UserDropdown } from './UserDropdown';
 
 export const Header: React.FC = () => {
   const {
     activeView,
     setActiveView,
-    evidenceList,
+    activeCase,
   } = useCaseStore();
   const { user, openAuth } = useAuthStore();
   const [logoError, setLogoError] = useState(false);
-  const navButtonClass = (isActive: boolean) =>
-    `flex items-center space-x-2 px-4 py-2 rounded-full text-sm transition-all duration-150 ${
-      isActive
-        ? 'bg-investigative-violet text-white font-normal shadow-xs'
-        : 'text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised/60'
-    }`;
 
   return (
     <header className="h-18 md:h-20 border-b border-investigative-border/50 bg-investigative-surface/95 px-4 md:px-6 flex items-center justify-between select-none shrink-0 z-20 backdrop-blur-md">
@@ -55,47 +49,25 @@ export const Header: React.FC = () => {
         </button>
       </div>
 
-      {/* Primary Navigation: Home, Workspace, Evidence, Finding */}
-      <nav aria-label="Main Navigation" className="flex items-center space-x-1 sm:space-x-2">
-        <button
-          onClick={() => setActiveView('landing')}
-          className={navButtonClass(activeView === 'landing')}
-          title="Home"
-        >
-          <Home className="w-4 h-4" />
-          <span>Home</span>
-        </button>
-
-        <button
-          onClick={() => setActiveView('workspace')}
-          className={navButtonClass(activeView === 'workspace')}
-          title="Workspace"
-        >
-          <BookOpen className="w-4 h-4" />
-          <span>Workspace</span>
-        </button>
-
-        <button
-          onClick={() => setActiveView('evidence')}
-          className={navButtonClass(activeView === 'evidence')}
-          title="Evidence"
-        >
-          <BookmarkCheck className="w-4 h-4" />
-          <span>Evidence</span>
-          <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-investigative-surface-raised text-investigative-text-muted">
-            {evidenceList.length}
-          </span>
-        </button>
-
-        <button
-          onClick={() => setActiveView('finding')}
-          className={navButtonClass(activeView === 'finding')}
-          title="Finding"
-        >
-          <FileText className="w-4 h-4" />
-          <span>Finding</span>
-        </button>
-      </nav>
+      {/* Contextual navigation when inside a problem workspace */}
+      {activeView === 'workspace' && (
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setActiveView('landing')}
+            className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-sm bg-investigative-surface-raised/70 border border-investigative-border/60 text-investigative-text-muted hover:text-investigative-text hover:bg-investigative-surface-raised transition-colors cursor-pointer"
+            title="Return to Dashboard"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Dashboard</span>
+          </button>
+          <div className="hidden sm:flex items-center space-x-2 text-xs font-mono bg-investigative-surface-raised/40 border border-investigative-border/50 px-3 py-1 rounded-full text-investigative-text-muted">
+            <span className="w-2 h-2 rounded-full bg-investigative-violet" />
+            <span className="text-investigative-text font-medium">{activeCase.code}</span>
+            <span>·</span>
+            <span className="truncate max-w-48 md:max-w-72">{activeCase.title}</span>
+          </div>
+        </div>
+      )}
 
       {/* Actions: User Profile Chip Menu */}
       <div className="flex items-center space-x-2">

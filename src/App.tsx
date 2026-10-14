@@ -5,15 +5,13 @@ import { Header } from './components/layout/Header';
 import { Sidebar } from './components/layout/Sidebar';
 import { LineageBar } from './components/layout/LineageBar';
 import { Workspace } from './components/workspace/Workspace';
-import { EvidenceBoard } from './components/evidence/EvidenceBoard';
-import { FindingReport } from './components/findings/FindingReport';
 import { LandingPage } from './components/landing/LandingPage';
 import { AuthModal } from './components/auth/AuthModal';
 import { ProfilePage } from './components/profile/ProfilePage';
 import { HelpPage } from './components/help/HelpPage';
 
 export const App: React.FC = () => {
-  const { activeCase, selectCase, activeView, theme, dbError } = useCaseStore();
+  const { activeCase, selectCase, activeView, theme, dbError, setWorkspaceTab } = useCaseStore();
   const user = useAuthStore((s) => s.user);
 
   // Initialize PGlite database on initial mount
@@ -25,6 +23,15 @@ export const App: React.FC = () => {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // Sync workspace tab if navigated via legacy/saved evidence or finding view
+  useEffect(() => {
+    if (activeView === 'evidence') {
+      setWorkspaceTab('evidence');
+    } else if (activeView === 'finding') {
+      setWorkspaceTab('finding');
+    }
+  }, [activeView, setWorkspaceTab]);
 
   return (
     <div className="flex flex-col h-screen w-screen bg-investigative-bg text-investigative-text overflow-hidden font-sans">
@@ -63,9 +70,7 @@ export const App: React.FC = () => {
 
             {/* Active View Switcher */}
             <main className="flex-1 min-h-0 overflow-hidden">
-              {activeView === 'workspace' && <Workspace />}
-              {activeView === 'evidence' && <EvidenceBoard />}
-              {activeView === 'finding' && <FindingReport />}
+              {(activeView === 'workspace' || activeView === 'evidence' || activeView === 'finding') && <Workspace />}
             </main>
           </div>
         </div>

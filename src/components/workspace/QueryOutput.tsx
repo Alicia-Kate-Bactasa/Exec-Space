@@ -2,17 +2,39 @@ import React, { useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { Visualization } from './Visualization';
 import { InvestigationNotes } from '../notes/InvestigationNotes';
-import { BookmarkPlus, Table, BarChart3, Edit3, AlertCircle, Copy, Check } from 'lucide-react';
+import { WorkspaceEvidenceTab } from './WorkspaceEvidenceTab';
+import { WorkspaceFindingTab } from './WorkspaceFindingTab';
+import {
+  BookmarkPlus,
+  Table,
+  BarChart3,
+  Edit3,
+  AlertCircle,
+  Copy,
+  Check,
+  BookmarkCheck,
+  FileText,
+} from 'lucide-react';
 
 interface QueryOutputProps {
   onOpenSaveEvidence: () => void;
 }
 
 export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) => {
-  const { currentResult, isExecuting } = useCaseStore();
-  const [activeTab, setActiveTab] = useState<'table' | 'chart' | 'notes'>('table');
+  const {
+    currentResult,
+    isExecuting,
+    workspaceTab,
+    setWorkspaceTab,
+    evidenceList,
+    activeCase,
+    findings,
+  } = useCaseStore();
+
   const [copied, setCopied] = useState(false);
 
+  const caseEvidence = evidenceList.filter((e) => e.caseId === activeCase.id);
+  const isSolved = findings[activeCase.id]?.verdict?.status === 'VERIFIED';
   const hasData = currentResult && !currentResult.error && currentResult.rows.length > 0;
 
   const copyAsCsv = async () => {
@@ -34,52 +56,75 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
     window.setTimeout(() => setCopied(false), 1600);
   };
 
+  const tabButtonClass = (isActive: boolean) =>
+    `flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs sm:text-sm transition-colors cursor-pointer ${
+      isActive
+        ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
+        : 'text-investigative-text-muted hover:text-investigative-text'
+    }`;
+
   return (
     <div className="h-full flex flex-col bg-investigative-surface/70 overflow-hidden">
-      {/* Results Header */}
-      <div className="h-12 px-4 border-b border-investigative-border/50 flex items-center justify-between bg-investigative-surface/50 shrink-0">
-        <div className="flex items-center space-x-1 bg-investigative-surface-raised/40 p-1 rounded-full border border-investigative-border/40">
+      {/* Results & Evidence Header Tabs */}
+      <div className="h-12 px-3 sm:px-4 border-b border-investigative-border/50 flex items-center justify-between bg-investigative-surface/50 shrink-0 gap-2 overflow-x-auto select-none">
+        <div className="flex items-center space-x-1 bg-investigative-surface-raised/40 p-1 rounded-full border border-investigative-border/40 shrink-0">
           <button
-            onClick={() => setActiveTab('table')}
-            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm transition-colors ${
-              activeTab === 'table'
-                ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
-                : 'text-investigative-text-muted hover:text-investigative-text'
-            }`}
+            onClick={() => setWorkspaceTab('table')}
+            className={tabButtonClass(workspaceTab === 'table')}
           >
             <Table className="w-4 h-4" />
             <span>Results</span>
           </button>
 
           <button
-            onClick={() => setActiveTab('chart')}
-            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm transition-colors ${
-              activeTab === 'chart'
-                ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
-                : 'text-investigative-text-muted hover:text-investigative-text'
-            }`}
+            onClick={() => setWorkspaceTab('evidence')}
+            className={tabButtonClass(workspaceTab === 'evidence')}
           >
-            <BarChart3 className="w-4 h-4" />
-            <span>Visualization</span>
+            <BookmarkCheck className="w-4 h-4 text-investigative-violet" />
+            <span>Evidence</span>
+            <span
+              className={`text-[11px] font-mono px-1.5 py-0.2 rounded-full ${
+                workspaceTab === 'evidence'
+                  ? 'bg-investigative-violet-subtle text-investigative-violet font-semibold'
+                  : 'bg-investigative-surface-raised text-investigative-text-muted'
+              }`}
+            >
+              {caseEvidence.length}
+            </span>
           </button>
 
           <button
-            onClick={() => setActiveTab('notes')}
-            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm transition-colors ${
-              activeTab === 'notes'
-                ? 'bg-investigative-surface text-investigative-text font-medium shadow-xs border border-investigative-border/70'
-                : 'text-investigative-text-muted hover:text-investigative-text'
-            }`}
+            onClick={() => setWorkspaceTab('finding')}
+            className={tabButtonClass(workspaceTab === 'finding')}
+          >
+            <FileText className="w-4 h-4" />
+            <span>Finding</span>
+            {isSolved && (
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-xs" title="Case Solved" />
+            )}
+          </button>
+
+          <button
+            onClick={() => setWorkspaceTab('chart')}
+            className={tabButtonClass(workspaceTab === 'chart')}
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span className="hidden md:inline">Chart</span>
+          </button>
+
+          <button
+            onClick={() => setWorkspaceTab('notes')}
+            className={tabButtonClass(workspaceTab === 'notes')}
           >
             <Edit3 className="w-4 h-4" />
-            <span>Notes</span>
+            <span className="hidden md:inline">Notes</span>
           </button>
         </div>
 
-        {/* Stats & Actions */}
-        <div className="flex items-center space-x-3">
-          {currentResult && (
-            <div className="flex items-center space-x-2 text-xs font-mono text-investigative-text-muted">
+        {/* Stats & Actions when on Results tab */}
+        <div className="flex items-center space-x-2 shrink-0">
+          {workspaceTab === 'table' && currentResult && (
+            <div className="hidden lg:flex items-center space-x-2 text-xs font-mono text-investigative-text-muted">
               {currentResult.error ? (
                 <span className="text-violet-400 font-medium">Query Error</span>
               ) : (
@@ -92,34 +137,47 @@ export const QueryOutput: React.FC<QueryOutputProps> = ({ onOpenSaveEvidence }) 
             </div>
           )}
 
-          <button
-            onClick={copyAsCsv}
-            disabled={!hasData || isExecuting}
-            className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-sm border border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text hover:border-investigative-violet hover:bg-investigative-violet-subtle transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            title="Copy result as CSV"
-          >
-            {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-            <span>{copied ? 'Copied' : 'Copy CSV'}</span>
-          </button>
+          {workspaceTab === 'table' && (
+            <>
+              <button
+                onClick={copyAsCsv}
+                disabled={!hasData || isExecuting}
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs border border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text hover:border-investigative-violet hover:bg-investigative-violet-subtle transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                title="Copy result as CSV"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy CSV'}</span>
+              </button>
 
-          <button
-            onClick={onOpenSaveEvidence}
-            disabled={!hasData || isExecuting}
-            className="flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-sm font-medium border border-investigative-border/70 hover:border-investigative-violet hover:bg-investigative-violet-subtle text-investigative-text transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
-            title="Save query and result to Evidence"
-          >
-            <BookmarkPlus className="w-4 h-4 text-investigative-violet" />
-            <span>Save Evidence</span>
-          </button>
+              <button
+                onClick={onOpenSaveEvidence}
+                disabled={!hasData || isExecuting}
+                className="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium border border-investigative-border/70 hover:border-investigative-violet hover:bg-investigative-violet-subtle text-investigative-text transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-xs cursor-pointer"
+                title="Save query and result to Evidence"
+              >
+                <BookmarkPlus className="w-3.5 h-3.5 text-investigative-violet" />
+                <span>Save Evidence</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
       {/* Main Tab Content Area */}
       <div className="flex-1 min-h-0 overflow-hidden">
-        {activeTab === 'chart' ? (
+        {workspaceTab === 'chart' ? (
           <Visualization />
-        ) : activeTab === 'notes' ? (
+        ) : workspaceTab === 'notes' ? (
           <InvestigationNotes />
+        ) : workspaceTab === 'evidence' ? (
+          <WorkspaceEvidenceTab
+            onGoToResults={() => setWorkspaceTab('table')}
+            onGoToFinding={() => setWorkspaceTab('finding')}
+          />
+        ) : workspaceTab === 'finding' ? (
+          <WorkspaceFindingTab
+            onGoToEvidence={() => setWorkspaceTab('evidence')}
+          />
         ) : (
           <div className="h-full overflow-auto">
             {isExecuting ? (
