@@ -1,101 +1,270 @@
 import React, { useMemo, useState } from 'react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { Database, ArrowRight, Search, CheckCircle2, Terminal, Pin, Trophy, CircleHelp } from 'lucide-react';
+import {
+  Database,
+  ArrowRight,
+  Search,
+  CheckCircle2,
+  FolderOpen,
+  LogIn,
+  UserPlus,
+  Play,
+  RotateCcw,
+  ChevronDown,
+} from 'lucide-react';
 import { CaseDefinition } from '../../types';
 
-type DifficultyFilter = 'All' | 'Beginner' | 'Intermediate' | 'Advanced';
+type LevelType = 'Beginner' | 'Intermediate' | 'Advanced';
 
-const FILTERS: DifficultyFilter[] = ['All', 'Beginner', 'Intermediate', 'Advanced'];
+const LEVEL_DESCRIPTIONS: Record<LevelType, { title: string; subtitle: string; badgeClass: string; barClass: string }> = {
+  Beginner: {
+    title: 'Beginner',
+    subtitle: 'Learn SELECT, WHERE, and foundational queries. No prior SQL experience needed.',
+    badgeClass: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30',
+    barClass: 'bg-emerald-500',
+  },
+  Intermediate: {
+    title: 'Intermediate',
+    subtitle: 'Master JOINs, GROUP BY, aggregations, and business logic anomalies.',
+    badgeClass: 'bg-violet-500/10 text-violet-400 border border-violet-500/30',
+    barClass: 'bg-investigative-violet',
+  },
+  Advanced: {
+    title: 'Advanced',
+    subtitle: 'Tackle CTEs, window functions, and complex deduplication logic.',
+    badgeClass: 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30',
+    barClass: 'bg-indigo-500',
+  },
+};
 
-const CaseCard: React.FC<{
-  c: CaseDefinition;
+const ProblemCard: React.FC<{
+  problem: CaseDefinition;
   solved: boolean;
   onStart: (id: string) => void;
-}> = ({ c, solved, onStart }) => (
-  <div className="p-6 rounded-3xl bg-investigative-surface border border-investigative-border/60 hover:border-investigative-violet/60 transition-colors flex flex-col justify-between">
+}> = ({ problem, solved, onStart }) => (
+  <div className="p-5 rounded-2xl bg-investigative-surface border border-investigative-border/60 hover:border-investigative-violet/60 transition-all flex flex-col justify-between shadow-xs">
     <div>
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-mono font-medium text-investigative-violet bg-investigative-violet-subtle border border-investigative-violet/20 px-3 py-1 rounded-full">
-          {c.code}
-        </span>
-        <span className={`text-xs px-3 py-1 rounded-full font-mono font-medium ${
-          c.difficulty === 'Beginner'
-            ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
-            : c.difficulty === 'Intermediate'
-            ? 'bg-violet-500/10 text-violet-500 border border-violet-500/20'
-            : 'bg-indigo-500/10 text-indigo-500 border border-indigo-500/20'
-        }`}>
-          {c.difficulty}
-        </span>
+      {/* Problem Top Badges */}
+      <div className="flex items-center justify-between gap-2 mb-2.5">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="text-[11px] font-mono font-bold text-investigative-violet bg-investigative-violet-subtle border border-investigative-violet/20 px-2.5 py-0.5 rounded-full">
+            {problem.code}
+          </span>
+          <span className="text-[11px] font-mono text-investigative-text-muted border border-investigative-border/60 px-2 py-0.5 rounded-full">
+            {problem.category}
+          </span>
+        </div>
+        {solved && (
+          <span className="text-xs font-mono font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Solved</span>
+          </span>
+        )}
       </div>
 
-      <h3 className="text-base font-medium text-investigative-text mb-1 flex items-center gap-2">
-        {c.title}
-        {solved && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
+      {/* Alphabetical Title & Summary */}
+      <h3 className="text-sm md:text-base font-semibold text-investigative-text mb-1.5 leading-snug">
+        {problem.title}
       </h3>
-      <p className="text-sm font-light text-investigative-text-muted leading-relaxed mb-4">
-        {c.summary}
+      <p className="text-xs text-investigative-text-muted font-light leading-relaxed mb-3.5 line-clamp-2">
+        {problem.summary}
       </p>
 
-      <div className="text-xs text-investigative-text-muted/80 font-mono flex items-center space-x-2 mb-4">
-        <Database className="w-3.5 h-3.5 text-investigative-violet" />
-        <span>Tables: {c.tables.map((t) => t.name).join(', ')}</span>
+      {/* Tables Involved */}
+      <div className="text-[11px] text-investigative-text-muted font-mono flex items-center space-x-1.5 mb-4">
+        <Database className="w-3.5 h-3.5 text-investigative-violet shrink-0" />
+        <span className="truncate">Tables: {problem.tables.map((t) => t.name).join(', ')}</span>
       </div>
     </div>
 
+    {/* Launch Button */}
     <button
-      onClick={() => onStart(c.id)}
-      className="w-full flex items-center justify-center space-x-2 py-3 rounded-full bg-investigative-surface-raised border border-investigative-border/70 hover:border-investigative-violet hover:bg-investigative-violet hover:text-white text-investigative-text text-sm font-medium transition-colors"
+      onClick={() => onStart(problem.id)}
+      className={`w-full flex items-center justify-center space-x-2 py-2.5 rounded-full border text-xs font-medium transition-colors cursor-pointer ${
+        solved
+          ? 'bg-investigative-surface-raised border-investigative-border/70 hover:border-investigative-violet text-investigative-text hover:bg-investigative-surface-raised/80'
+          : 'bg-investigative-violet text-white border-investigative-violet hover:bg-investigative-violet-hover'
+      }`}
     >
-      <span>{solved ? 'Review Case' : 'Start Case'}</span>
-      <ArrowRight className="w-4 h-4" />
+      <span>{solved ? 'Review Problem' : 'Start Problem'}</span>
+      <ArrowRight className="w-3.5 h-3.5" />
     </button>
   </div>
 );
 
-const STEPS = [
-  { n: '1', t: 'Pick a set', d: 'Start with Beginner. Each set is one clear question.' },
-  { n: '2', t: 'Run & explore', d: 'Press Run on the starter query, then tweak it.' },
-  { n: '3', t: 'Pin & solve', d: 'Save evidence, then submit your finding.' },
-];
-
-const CasesSection: React.FC<{
-  visible: CaseDefinition[];
-  groups: { title: string; hint: string; items: CaseDefinition[] }[];
-  query: string;
+const LevelMasterCard: React.FC<{
+  level: LevelType;
+  problems: CaseDefinition[];
   isSolved: (id: string) => boolean;
   onStart: (id: string) => void;
-}> = ({ visible, groups, query, isSolved, onStart }) => (
-  <section id="cases-section" className="px-6 pb-12 max-w-6xl mx-auto">
-    {visible.length === 0 && (
-      <div className="p-8 text-center border border-dashed border-investigative-border/60 rounded-3xl text-sm text-investigative-text-muted">
-        No sets match “{query}”. Try clearing the search or picking another level.
-      </div>
-    )}
-    {groups.map((g) =>
-      g.items.length > 0 ? (
-        <div key={g.title} className="mb-10">
-          <div className="flex items-baseline justify-between mb-4">
-            <h2 className="text-lg font-light tracking-tight">{g.title}</h2>
-            <span className="text-xs font-mono text-investigative-text-muted">{g.hint} · {g.items.length} sets</span>
+  searchQuery: string;
+  defaultExpanded?: boolean;
+}> = ({ level, problems, isSolved, onStart, searchQuery, defaultExpanded = true }) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [isExpanded, setIsExpanded] = useState<boolean>(defaultExpanded);
+  const levelInfo = LEVEL_DESCRIPTIONS[level];
+
+  // Auto-expand card if user searches
+  const hasActiveSearch = searchQuery.trim().length > 0;
+  const isCardOpen = hasActiveSearch ? true : isExpanded;
+
+  // Extract all unique categories for this level and sort alphabetically
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    problems.forEach((p) => {
+      if (p.category) set.add(p.category);
+    });
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [problems]);
+
+  // Filter problems by search query and category, then sort ALPHABETICALLY by title
+  const filteredProblems = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return problems
+      .filter((p) => {
+        if (selectedCategory !== 'All' && p.category !== selectedCategory) return false;
+        if (!q) return true;
+        return (
+          p.title.toLowerCase().includes(q) ||
+          p.code.toLowerCase().includes(q) ||
+          p.summary.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.tables.some((t) => t.name.toLowerCase().includes(q))
+        );
+      })
+      .sort((a, b) => a.title.localeCompare(b.title));
+  }, [problems, selectedCategory, searchQuery]);
+
+  const solvedCount = problems.filter((p) => isSolved(p.id)).length;
+  const progressPercent = problems.length > 0 ? (solvedCount / problems.length) * 100 : 0;
+
+  return (
+    <div className="bg-investigative-surface/80 border border-investigative-border/70 rounded-3xl p-5 md:p-6 mb-5 shadow-xs transition-all">
+      {/* Level Card Header — Click to expand / collapse */}
+      <div
+        onClick={() => setIsExpanded((prev) => !prev)}
+        className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer select-none transition-colors group ${
+          isCardOpen ? 'pb-4 border-b border-investigative-border/50' : ''
+        }`}
+      >
+        <div className="flex items-start space-x-3.5">
+          <div className="mt-1 sm:mt-0.5">
+            <span
+              className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all ${
+                isCardOpen
+                  ? 'bg-investigative-surface-raised border-investigative-border/70 text-investigative-text'
+                  : 'bg-investigative-surface-raised/40 border-investigative-border/40 text-investigative-text-muted group-hover:text-investigative-text'
+              }`}
+            >
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  isCardOpen ? 'rotate-180 text-investigative-violet' : ''
+                }`}
+              />
+            </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {g.items.map((c) => (
-              <CaseCard key={c.id} c={c} solved={isSolved(c.id)} onStart={onStart} />
-            ))}
+
+          <div>
+            <div className="flex items-center space-x-2.5 mb-1">
+              <span className={`text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full ${levelInfo.badgeClass}`}>
+                {levelInfo.title}
+              </span>
+              <span className="text-xs font-mono text-investigative-text-muted">
+                {problems.length} problems
+              </span>
+              <span className="text-[11px] font-mono text-investigative-text-muted/60 hidden sm:inline">
+                {isCardOpen ? '· Click to collapse' : '· Click to view problems'}
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-investigative-text-muted font-light max-w-2xl">
+              {levelInfo.subtitle}
+            </p>
           </div>
         </div>
-      ) : null
-    )}
-  </section>
-);
+
+        {/* Level Solved Progress Bar */}
+        <div className="w-full sm:w-56 shrink-0 space-y-1.5 pl-10 sm:pl-0">
+          <div className="flex justify-between text-xs font-mono text-investigative-text-muted">
+            <span>Completed</span>
+            <span className="font-semibold text-investigative-text">
+              {solvedCount} / {problems.length}
+            </span>
+          </div>
+          <div className="h-1.5 w-full bg-investigative-surface-raised border border-investigative-border/60 rounded-full overflow-hidden">
+            <div
+              className={`h-full ${levelInfo.barClass} rounded-full transition-all duration-300`}
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Collapsible Content Area */}
+      {isCardOpen && (
+        <div className="space-y-5 pt-4 animate-in fade-in duration-150">
+
+      {/* Category Filter Pills (To keep the card organized and avoid clutter) */}
+      <div className="flex items-center gap-1.5 flex-wrap">
+        <span className="text-xs text-investigative-text-muted font-mono mr-1">
+          Categories:
+        </span>
+        <button
+          onClick={() => setSelectedCategory('All')}
+          className={`px-3 py-1 rounded-full text-xs font-mono transition-colors cursor-pointer ${
+            selectedCategory === 'All'
+              ? 'bg-investigative-violet text-white font-medium shadow-xs'
+              : 'bg-investigative-surface-raised/70 border border-investigative-border/60 text-investigative-text-muted hover:text-investigative-text'
+          }`}
+        >
+          All ({problems.length})
+        </button>
+        {categories.map((cat) => {
+          const catCount = problems.filter((p) => p.category === cat).length;
+          return (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1 rounded-full text-xs font-mono transition-colors cursor-pointer ${
+                selectedCategory === cat
+                  ? 'bg-investigative-violet text-white font-medium shadow-xs'
+                  : 'bg-investigative-surface-raised/70 border border-investigative-border/60 text-investigative-text-muted hover:text-investigative-text'
+              }`}
+            >
+              {cat} ({catCount})
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Problems Grid (Arranged Alphabetically) */}
+      {filteredProblems.length === 0 ? (
+        <div className="p-6 text-center border border-dashed border-investigative-border/60 rounded-2xl text-xs text-investigative-text-muted font-mono">
+          No problems found in {level} matching your search or category filter.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredProblems.map((p) => (
+            <ProblemCard
+              key={p.id}
+              problem={p}
+              solved={isSolved(p.id)}
+              onStart={onStart}
+            />
+          ))}
+        </div>
+      )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const LandingPage: React.FC = () => {
-  const { cases, selectCase, setActiveView, findings, lastCaseId, lastWorkView } = useCaseStore();
+  const { cases, selectCase, setActiveView, findings, lastCaseId } = useCaseStore();
   const { user, openAuth } = useAuthStore();
-  const [filter, setFilter] = useState<DifficultyFilter>('All');
-  const [query, setQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [levelFilter, setLevelFilter] = useState<'All' | LevelType>('All');
 
   const handleStartCase = (caseId: string) => {
     selectCase(caseId);
@@ -103,318 +272,156 @@ export const LandingPage: React.FC = () => {
   };
 
   const isSolved = (id: string) => findings[id]?.verdict?.status === 'VERIFIED';
-  const solvedCount = cases.filter((c) => isSolved(c.id)).length;
+  const totalSolved = cases.filter((c) => isSolved(c.id)).length;
   const lastCase = useMemo(() => cases.find((c) => c.id === lastCaseId) || null, [cases, lastCaseId]);
 
-  const handleResume = async () => {
-    if (!lastCase) return;
-    await selectCase(lastCase.id);
-    setActiveView(lastWorkView);
-  };
-
-  const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return cases.filter((c) => {
-      if (filter !== 'All' && c.difficulty !== filter) return false;
-      if (!q) return true;
-      return `${c.code} ${c.title} ${c.summary} ${c.category}`.toLowerCase().includes(q);
-    });
-  }, [cases, filter, query]);
-
-  const groups: { title: string; hint: string; items: CaseDefinition[] }[] = useMemo(() => {
-    if (filter !== 'All') return [{ title: `${filter} sets`, hint: `${visible.length} of ${cases.length}`, items: visible }];
-    const by = (d: DifficultyFilter) => visible.filter((c) => c.difficulty === d);
-    return [
-      { title: 'Start here — Beginner', hint: 'Learn SELECT, WHERE, GROUP BY', items: by('Beginner') },
-      { title: 'Next — Intermediate', hint: 'Joins, aggregates, anomalies', items: by('Intermediate') },
-      { title: 'Challenge — Advanced', hint: 'Windows, CTEs, dedup logic', items: by('Advanced') },
-    ];
-  }, [visible, filter, cases.length]);
-
-  // Logged-out guests get a persuasive landing page: no hero grid, no case
-  // list — just what the app is, how it works, and clear calls to action.
-  if (!user) {
-    const levelCards = [
-      { level: 'Beginner' as const, skill: 'SELECT, WHERE, GROUP BY', blurb: 'No experience needed. Each set asks one clear question and walks you through the query.' },
-      { level: 'Intermediate' as const, skill: 'Joins, aggregates, anomalies', blurb: 'Connect tables, spot the numbers that don’t add up, and build the case.' },
-      { level: 'Advanced' as const, skill: 'Windows, CTEs, dedup logic', blurb: 'For when you’re ready: layered queries and tricky data-quality puzzles.' },
-    ];
-    const countFor = (level: string) => cases.filter((c) => c.difficulty === level).length;
-
-    return (
-      <div className="h-full overflow-y-auto bg-investigative-bg text-investigative-text select-none">
-        {/* Guest header bar — brand + auth CTAs (app Header stays login-only) */}
-        <div className="sticky top-0 z-10 bg-investigative-bg/90 backdrop-blur-md border-b border-investigative-border/40">
-          <div className="max-w-6xl mx-auto px-6 py-3.5 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <img
-                src="/ExecSpaceLogo.png"
-                alt="ExecSpace Logo"
-                className="h-8 w-auto object-contain"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  if (!target.src.includes('/assets/')) target.src = '/assets/ExecSpaceLogo.png';
-                }}
-              />
-              <span className="text-lg font-light tracking-wide">ExecSpace</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setActiveView('help')}
-                className="w-9 h-9 rounded-full border border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text hover:border-investigative-violet transition-colors flex items-center justify-center"
-                title="How to use ExecSpace"
-                aria-label="How to use ExecSpace"
-              >
-                <CircleHelp className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => openAuth('login')}
-                className="px-4 py-2 rounded-full text-sm text-investigative-text-muted hover:text-investigative-text transition-colors"
-              >
-                Log in
-              </button>
-              <button
-                onClick={() => openAuth('signup')}
-                className="px-5 py-2 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
-              >
-                Sign up free
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Section 1 — Hero: what ExecSpace is + primary CTA */}
-        <section className="px-6 pt-16 pb-14 max-w-6xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-5xl font-light tracking-tight mb-4 leading-tight">
-            Learn SQL by solving<br className="hidden sm:block" /> database mysteries.
-          </h1>
-          <p className="text-sm sm:text-lg text-investigative-text-muted leading-relaxed font-light mb-8 max-w-2xl mx-auto">
-            ExecSpace turns practice queries into detective work. Run real SQL against
-            realistic datasets, pin your evidence, and prove your finding — easiest
-            case first, no setup required.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3 mb-10">
-            <button
-              onClick={() => openAuth('signup')}
-              className="flex items-center gap-2 px-7 py-3 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
-            >
-              Sign up free
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => openAuth('login')}
-              className="px-7 py-3 rounded-full border border-investigative-border/70 text-sm text-investigative-text hover:border-investigative-violet transition-colors"
-            >
-              Log in
-            </button>
-          </div>
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs font-mono text-investigative-text-muted">
-            <span>{cases.length} case sets</span>
-            <span>3 difficulty levels</span>
-            <span>Zero install</span>
-            <span>Progress auto-saved</span>
-          </div>
-        </section>
-
-        {/* Section 2 — What you get */}
-        <section className="px-6 py-14 max-w-6xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-2 text-center">Everything you need to learn by doing</h2>
-          <p className="text-sm text-investigative-text-muted font-light mb-8 text-center max-w-xl mx-auto">
-            No tutorials to watch, no database to install. Just open a case and start querying.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { icon: Terminal, t: 'Real SQL, zero setup', d: 'Queries run in your browser against an in-memory database. Nothing to install, ever.' },
-              { icon: Search, t: 'Mysteries, not exercises', d: 'Each set is a small story — failed orders, refund spikes, duplicate rows — with one clear question to answer.' },
-              { icon: Pin, t: 'Pin your evidence', d: 'Save the query results that matter onto your evidence board as you investigate.' },
-              { icon: Trophy, t: 'Prove your finding', d: 'Submit your culprit and explanation for instant feedback, and watch your solved count grow.' },
-            ].map((f) => (
-              <div key={f.t} className="p-6 rounded-3xl bg-investigative-surface border border-investigative-border/60">
-                <div className="w-10 h-10 rounded-2xl bg-investigative-violet-subtle border border-investigative-violet/30 flex items-center justify-center text-investigative-violet mb-3">
-                  <f.icon className="w-5 h-5" />
-                </div>
-                <h3 className="text-sm font-medium mb-1.5">{f.t}</h3>
-                <p className="text-xs font-light text-investigative-text-muted leading-relaxed">{f.d}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section 3 — How it works */}
-        <section className="px-6 py-14 max-w-6xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-2 text-center">How it works</h2>
-          <p className="text-sm text-investigative-text-muted font-light mb-8 text-center max-w-xl mx-auto">
-            Three steps, repeated across every case — the same loop real analysts run.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {STEPS.map((s) => (
-              <div key={s.n} className="p-6 rounded-3xl bg-investigative-surface border border-investigative-border/60">
-                <div className="w-9 h-9 rounded-full bg-investigative-violet text-white flex items-center justify-center font-semibold text-sm mb-3">
-                  {s.n}
-                </div>
-                <h3 className="text-sm font-medium mb-1">{s.t}</h3>
-                <p className="text-xs font-light text-investigative-text-muted leading-relaxed">{s.d}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section 4 — Learning path, no case list */}
-        <section className="px-6 py-14 max-w-6xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-light tracking-tight mb-2 text-center">A path from first query to confident</h2>
-          <p className="text-sm text-investigative-text-muted font-light mb-8 text-center max-w-xl mx-auto">
-            Cases unlock in order of difficulty, so you always know what to try next.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {levelCards.map((l) => (
-              <div key={l.level} className="p-6 rounded-3xl bg-investigative-surface border border-investigative-border/60 flex flex-col">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-medium">{l.level}</span>
-                  <span className="text-xs font-mono text-investigative-text-muted">{countFor(l.level)} sets</span>
-                </div>
-                <div className="text-xs font-mono text-investigative-violet mb-2">{l.skill}</div>
-                <p className="text-xs font-light text-investigative-text-muted leading-relaxed mb-5 flex-1">{l.blurb}</p>
-                <button
-                  onClick={() => openAuth('signup')}
-                  className="w-full py-2.5 rounded-full border border-investigative-border/70 text-xs font-medium hover:border-investigative-violet hover:text-investigative-violet transition-colors"
-                >
-                  Start here
-                </button>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section 5 — Detached call-to-action card */}
-        <section className="px-6 pb-16 max-w-6xl mx-auto">
-          <div className="rounded-3xl border border-investigative-violet/30 bg-investigative-violet-subtle px-6 py-12 sm:px-12 text-center">
-            <h2 className="text-xl sm:text-3xl font-light tracking-tight mb-3">
-              Your first mystery is waiting.
-            </h2>
-            <p className="text-sm text-investigative-text-muted font-light mb-7 max-w-lg mx-auto">
-              Create a free account to save your progress across all 30 case sets —
-              or log in to pick up exactly where you left off.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              <button
-                onClick={() => openAuth('signup')}
-                className="flex items-center gap-2 px-7 py-3 rounded-full bg-investigative-violet text-white text-sm font-medium hover:bg-investigative-violet-hover transition-colors"
-              >
-                Sign up free
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => openAuth('login')}
-                className="px-7 py-3 rounded-full border border-investigative-violet/40 text-sm text-investigative-text hover:border-investigative-violet transition-colors"
-              >
-                Log in
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <footer className="py-8 px-6 border-t border-investigative-border/40 text-center text-xs text-investigative-text-muted font-mono">
-          ExecSpace — 30 gentle database investigations for beginners
-        </footer>
-      </div>
-    );
-  }
+  // Split problems into the 3 levels
+  const beginnerProblems = useMemo(() => cases.filter((c) => c.difficulty === 'Beginner'), [cases]);
+  const intermediateProblems = useMemo(() => cases.filter((c) => c.difficulty === 'Intermediate'), [cases]);
+  const advancedProblems = useMemo(() => cases.filter((c) => c.difficulty === 'Advanced'), [cases]);
 
   return (
     <div className="h-full overflow-y-auto bg-investigative-bg text-investigative-text select-none">
-      {/* HERO — minimal, no glow, no staged animation */}
-      <section className="px-6 pt-12 pb-10 max-w-6xl mx-auto text-left">
-        <div className="flex items-start gap-5 mb-8">
-          <img
-            src="/ExecSpaceLogo.png"
-            alt="ExecSpace Logo"
-            className="w-16 h-auto object-contain shrink-0"
-            onError={(e) => {
-              const target = e.currentTarget;
-              if (!target.src.includes('/assets/')) target.src = '/assets/ExecSpaceLogo.png';
-            }}
-          />
+      {/* GUEST BANNER (If visitor is not yet logged in) */}
+      {!user && (
+        <div className="bg-investigative-surface border-b border-investigative-border/50 px-6 py-3 flex items-center justify-between text-xs sticky top-0 z-20 backdrop-blur-md">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-investigative-text">Welcome to ExecSpace</span>
+            <span className="hidden sm:inline text-investigative-text-muted">— 30 interactive SQL investigation sets.</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => openAuth('login')}
+              className="px-3.5 py-1.5 rounded-full text-investigative-text hover:bg-investigative-surface-raised font-medium transition-colors"
+            >
+              Log in
+            </button>
+            <button
+              onClick={() => openAuth('signup')}
+              className="px-4 py-1.5 rounded-full bg-investigative-violet text-white hover:bg-investigative-violet-hover font-medium transition-colors"
+            >
+              Sign up
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* DASHBOARD HERO HEADER */}
+      <section className="px-6 pt-8 pb-6 max-w-6xl mx-auto space-y-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="text-3xl font-light tracking-tight mb-2">ExecSpace</div>
-            <h1 className="text-xl sm:text-2xl font-normal tracking-tight mb-3 leading-snug">
-              Solve 30 bite-size database mysteries, easiest first.
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-investigative-text mb-1.5">
+              Dashboard
             </h1>
-            <p className="text-sm sm:text-base text-investigative-text-muted leading-relaxed font-light mb-4">
-              Pick a set below, run the starter query, pin evidence, and submit your finding.
-              Your progress saves automatically.
+            <p className="text-sm text-investigative-text-muted font-light max-w-xl">
+              Your single source of truth for all database investigation sets. Browse by level, explore categories, and solve real transactional discrepancies.
             </p>
-            {/* Progress */}
-            <div className="max-w-md">
-              <div className="flex justify-between text-xs font-mono text-investigative-text-muted mb-1.5">
-                <span>Your progress</span>
-                <span>{solvedCount} of {cases.length} solved</span>
-              </div>
-              <div className="h-2 rounded-full bg-investigative-surface-raised border border-investigative-border/60 overflow-hidden">
-                <div
-                  className="h-full bg-investigative-violet rounded-full transition-all"
-                  style={{ width: `${cases.length ? (solvedCount / cases.length) * 100 : 0}%` }}
-                />
-              </div>
+          </div>
+
+          {/* Quick Continue Button if user has active case */}
+          {lastCase && (
+            <button
+              onClick={() => handleStartCase(lastCase.id)}
+              className="flex items-center space-x-2 px-4 py-2.5 rounded-full bg-investigative-surface-raised border border-investigative-border/70 hover:border-investigative-violet text-xs font-medium text-investigative-text transition-colors self-start md:self-auto cursor-pointer"
+            >
+              <Play className="w-3.5 h-3.5 text-investigative-violet" />
+              <span>Continue {lastCase.code}: {lastCase.title}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* Overall Progress Bar Card */}
+        <div className="p-4 rounded-2xl bg-investigative-surface/60 border border-investigative-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-mono">
+          <div className="flex items-center space-x-3">
+            <FolderOpen className="w-5 h-5 text-investigative-violet shrink-0" />
+            <div>
+              <span className="font-semibold text-investigative-text block font-sans">Investigation Progress</span>
+              <span className="text-investigative-text-muted">
+                {totalSolved} of {cases.length} problems solved ({Math.round((totalSolved / (cases.length || 1)) * 100)}%)
+              </span>
             </div>
-            {lastCase && (
-              <button
-                onClick={handleResume}
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-investigative-border/70 text-sm text-investigative-text-muted hover:text-investigative-text hover:border-investigative-violet transition-colors"
-              >
-                Continue {lastCase.code}
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            )}
+          </div>
+
+          <div className="w-full sm:w-64">
+            <div className="h-2 rounded-full bg-investigative-surface-raised border border-investigative-border/60 overflow-hidden">
+              <div
+                className="h-full bg-investigative-violet rounded-full transition-all duration-300"
+                style={{ width: `${(totalSolved / (cases.length || 1)) * 100}%` }}
+              />
+            </div>
           </div>
         </div>
 
-        {/* 3 minimal steps */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
-          {STEPS.map((s) => (
-            <div key={s.n} className="p-5 rounded-2xl bg-investigative-surface border border-investigative-border/60">
-              <div className="w-8 h-8 rounded-full bg-investigative-violet-subtle border border-investigative-violet/30 flex items-center justify-center text-investigative-violet font-semibold text-xs mb-2">
-                {s.n}
-              </div>
-              <h2 className="text-sm font-medium mb-1">{s.t}</h2>
-              <p className="text-xs font-light text-investigative-text-muted leading-relaxed">{s.d}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Search + difficulty filter */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-          <div className="flex items-center gap-2 flex-1 bg-investigative-surface border border-investigative-border/60 rounded-full px-4 py-2.5">
+        {/* Global Search & Level Filter Controls */}
+        <div className="flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
+          <div className="flex items-center gap-2.5 flex-1 bg-investigative-surface border border-investigative-border/60 rounded-full px-4 py-2 text-xs">
             <Search className="w-4 h-4 text-investigative-text-muted shrink-0" />
             <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search 30 sets (e.g. refund, join, window)..."
-              className="w-full bg-transparent text-sm outline-none placeholder:text-investigative-text-muted/60"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search problems by title, category, or table..."
+              className="w-full bg-transparent outline-none placeholder:text-investigative-text-muted/60 text-investigative-text"
             />
           </div>
+
           <div className="flex gap-1.5 flex-wrap">
-            {FILTERS.map((f) => (
+            {(['All', 'Beginner', 'Intermediate', 'Advanced'] as const).map((l) => (
               <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-full text-xs font-medium border transition-colors ${
-                  filter === f
-                    ? 'bg-investigative-violet text-white border-investigative-violet'
-                    : 'border-investigative-border/70 text-investigative-text-muted hover:text-investigative-text'
+                key={l}
+                onClick={() => setLevelFilter(l)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-mono transition-colors cursor-pointer ${
+                  levelFilter === l
+                    ? 'bg-investigative-violet text-white font-medium shadow-xs'
+                    : 'bg-investigative-surface-raised/70 border border-investigative-border/60 text-investigative-text-muted hover:text-investigative-text'
                 }`}
               >
-                {f}
+                {l}
               </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ALL CASES — rendered in one go, grouped by level, no pagination */}
-      <CasesSection visible={visible} groups={groups} query={query} isSolved={isSolved} onStart={handleStartCase} />
+      {/* 3 LEVEL CARDS (The Single Source of Truth) */}
+      <main className="px-6 pb-12 max-w-6xl mx-auto">
+        {(levelFilter === 'All' || levelFilter === 'Beginner') && (
+          <LevelMasterCard
+            level="Beginner"
+            problems={beginnerProblems}
+            isSolved={isSolved}
+            onStart={handleStartCase}
+            searchQuery={searchQuery}
+            defaultExpanded={levelFilter === 'Beginner'}
+          />
+        )}
 
-      <footer className="py-8 px-6 border-t border-investigative-border/40 text-center text-xs text-investigative-text-muted font-mono">
-        ExecSpace — 30 gentle database investigations for beginners
+        {(levelFilter === 'All' || levelFilter === 'Intermediate') && (
+          <LevelMasterCard
+            level="Intermediate"
+            problems={intermediateProblems}
+            isSolved={isSolved}
+            onStart={handleStartCase}
+            searchQuery={searchQuery}
+            defaultExpanded={levelFilter === 'Intermediate'}
+          />
+        )}
+
+        {(levelFilter === 'All' || levelFilter === 'Advanced') && (
+          <LevelMasterCard
+            level="Advanced"
+            problems={advancedProblems}
+            isSolved={isSolved}
+            onStart={handleStartCase}
+            searchQuery={searchQuery}
+            defaultExpanded={levelFilter === 'Advanced'}
+          />
+        )}
+      </main>
+
+      {/* Simple Clean Footer */}
+      <footer className="py-6 px-6 border-t border-investigative-border/40 text-center text-xs text-investigative-text-muted font-mono">
+        ExecSpace — 30 database investigations arranged by category and difficulty
       </footer>
     </div>
   );

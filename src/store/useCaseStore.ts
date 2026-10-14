@@ -25,12 +25,14 @@ interface CaseStoreState {
   theme: 'dark' | 'light';
   lastCaseId: string | null;
   lastWorkView: Extract<ActiveView, 'workspace' | 'evidence' | 'finding'>;
+  workspaceTab: 'table' | 'chart' | 'evidence' | 'finding' | 'notes';
   sidebarTab: 'cases' | 'database';
   isExecuting: boolean;
   isDbReady: boolean;
   dbError: string | null;
 
   // Actions
+  setWorkspaceTab: (tab: 'table' | 'chart' | 'evidence' | 'finding' | 'notes') => void;
   setSidebarTab: (tab: 'cases' | 'database') => void;
   selectCase: (caseId: string) => Promise<void>;
   setActiveView: (view: ActiveView) => void;
@@ -99,11 +101,13 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
   theme: getInitialTheme(),
   lastCaseId: getInitialLastCaseId(),
   lastWorkView: getInitialLastWorkView(),
+  workspaceTab: 'table',
   sidebarTab: 'cases',
   isExecuting: false,
   isDbReady: false,
   dbError: null,
 
+  setWorkspaceTab: (tab) => set({ workspaceTab: tab }),
   setSidebarTab: (tab) => set({ sidebarTab: tab }),
 
   selectCase: async (caseId: string) => {
