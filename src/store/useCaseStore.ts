@@ -7,6 +7,7 @@ import {
   EvidenceItem,
   FindingSubmission,
   InvestigationStep,
+  NoteItem,
   QueryHistoryItem,
   QueryResult,
 } from '../types';
@@ -21,6 +22,8 @@ interface CaseStoreState {
   history: QueryHistoryItem[];
   evidenceList: EvidenceItem[];
   notes: Record<string, string>;
+  notesList: NoteItem[];
+  availableFolders: string[];
   findings: Record<string, FindingSubmission>;
   theme: 'dark' | 'light';
   lastCaseId: string | null;
@@ -43,6 +46,10 @@ interface CaseStoreState {
   addEvidence: (item: Omit<EvidenceItem, 'id' | 'createdAt'>) => void;
   removeEvidence: (id: string) => void;
   setNotes: (text: string) => void;
+  createNote: (data: { title: string; content: string; folder?: string; caseId?: string }) => NoteItem;
+  updateNote: (id: string, updates: Partial<Pick<NoteItem, 'title' | 'content' | 'folder' | 'caseId'>>) => void;
+  deleteNote: (id: string) => void;
+  addFolder: (folderName: string) => void;
   submitFinding: (finding: {
     culprit: string;
     discrepancy: string;
@@ -86,6 +93,64 @@ const getInitialLastWorkView = (): Extract<ActiveView, 'workspace' | 'evidence' 
   }
 };
 
+const DEFAULT_FOLDERS = ['General', 'Case Notes', 'Hypotheses', 'Findings'];
+
+const getInitialFolders = (): string[] => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('execspace_folders') || '[]');
+    if (Array.isArray(saved) && saved.length > 0) {
+      return Array.from(new Set([...DEFAULT_FOLDERS, ...saved]));
+    }
+  } catch {
+    // fallback
+  }
+  return DEFAULT_FOLDERS;
+};
+
+const getInitialNotesList = (): NoteItem[] => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('execspace_saved_notes') || '[]');
+    if (Array.isArray(saved) && saved.length > 0) {
+      return saved;
+    }
+  } catch {
+    // fallback
+  }
+
+  return [
+    {
+      id: 'note_seed_1',
+      caseId: 'case-01',
+      caseCode: 'Case #01',
+      caseTitle: 'The Case of the Ghost Orders',
+      title: 'Hypothesis: Ghost Orders in Orders Table',
+      content: 'Checked order IDs where status is COMPLETED but total amount is zero or negative. Need to cross-reference with order_items to verify whether line item sums match order totals.',
+      folder: 'Hypotheses',
+      createdAt: '2026-10-15T14:30:00.000Z',
+      updatedAt: '2026-10-16T18:20:00.000Z',
+    },
+    {
+      id: 'note_seed_2',
+      title: 'SQL Investigation Checklist',
+      content: '1. Check NULL values in foreign keys and critical fields.\n2. Look for duplicate transaction IDs or order references.\n3. Compare timestamps across related tables.\n4. Verify aggregate sums against the reported financial discrepancy.',
+      folder: 'General',
+      createdAt: '2026-10-14T09:15:00.000Z',
+      updatedAt: '2026-10-16T11:00:00.000Z',
+    },
+    {
+      id: 'note_seed_3',
+      caseId: 'case-02',
+      caseCode: 'Case #02',
+      caseTitle: 'The Mystery of the Midnight Returns',
+      title: 'Case #02 Return Window Analysis',
+      content: 'Review timestamp differences between delivery_date and return_request_date. Verify if policy window allows 14 days or 30 days, and check for negative elapsed days.',
+      folder: 'Case Notes',
+      createdAt: '2026-10-13T10:00:00.000Z',
+      updatedAt: '2026-10-14T16:45:00.000Z',
+    },
+  ];
+};
+
 // Initial state setup (default case is the first Beginner set)
 export const useCaseStore = create<CaseStoreState>((set, get) => ({
   cases: CASE_LIST,
@@ -97,6 +162,8 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
   history: [],
   evidenceList: [],
   notes: {},
+  notesList: getInitialNotesList(),
+  availableFolders: getInitialFolders(),
   findings: getInitialFindings(),
   theme: getInitialTheme(),
   lastCaseId: getInitialLastCaseId(),
@@ -199,13 +266,145 @@ export const useCaseStore = create<CaseStoreState>((set, get) => ({
   },
 
   setNotes: (text: string) => {
-    const activeCaseId = get().activeCase.id;
-    set({
-      notes: {
-        ...get().notes,
-        [activeCaseId]: text,
-      },
+    const activeCase = get().activeCase;
+    const notes = {
+      ...get().notes,
+      [activeCase.id]: text,
+    };
+
+    // Synchronize to notesList
+    const existingIndex = get().notesList.findIndex(
+      (n) => n.caseId === activeCase.id && n.folder === 'Case Notes'
+    );
+    let updatedNotesList = [...get().notesList];
+    const now = new Date().toISOString();
+
+    if (existingIndex >= 0) {
+      if (!text.trim()) {
+        updatedNotesList.splice(existingIndex, 1);
+      } else {
+        updatedNotesList[existingIndex] = {
+          ...updatedNotesList[existingIndex],
+          content: text,
+          updatedAt: now,
+        };
+      }
+    } else if (text.trim()) {
+      const newNote: NoteItem = {
+        id: `note_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        caseId: activeCase.id,
+        caseCode: activeCase.code,
+        caseTitle: activeCase.title,
+        title: `${activeCase.code} Investigation Notes`,
+        content: text,
+        folder: 'Case Notes',
+        createdAt: now,
+        updatedAt: now,
+      };
+      updatedNotesList = [newNote, ...updatedNotesList];
+    }
+
+    try {
+      localStorage.setItem('execspace_saved_notes', JSON.stringify(updatedNotesList));
+    } catch {
+      // ignore
+    }
+
+    set({ notes, notesList: updatedNotesList });
+  },
+
+  createNote: (data) => {
+    const now = new Date().toISOString();
+    const activeCase = data.caseId ? get().cases.find((c) => c.id === data.caseId) : undefined;
+    const newNote: NoteItem = {
+      id: `note_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      caseId: data.caseId,
+      caseCode: activeCase?.code,
+      caseTitle: activeCase?.title,
+      title: data.title.trim() || 'Untitled Note',
+      content: data.content,
+      folder: data.folder || 'General',
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const updatedList = [newNote, ...get().notesList];
+    try {
+      localStorage.setItem('execspace_saved_notes', JSON.stringify(updatedList));
+    } catch {}
+
+    if (data.caseId && (data.folder === 'Case Notes' || !get().notes[data.caseId])) {
+      set({
+        notesList: updatedList,
+        notes: { ...get().notes, [data.caseId]: data.content },
+      });
+    } else {
+      set({ notesList: updatedList });
+    }
+
+    return newNote;
+  },
+
+  updateNote: (id, updates) => {
+    const now = new Date().toISOString();
+    const updatedList = get().notesList.map((n) => {
+      if (n.id !== id) return n;
+      const associatedCase = updates.caseId
+        ? get().cases.find((c) => c.id === updates.caseId)
+        : updates.caseId === ''
+        ? undefined
+        : n.caseId
+        ? get().cases.find((c) => c.id === n.caseId)
+        : undefined;
+
+      return {
+        ...n,
+        ...updates,
+        caseCode: updates.caseId !== undefined ? associatedCase?.code : n.caseCode,
+        caseTitle: updates.caseId !== undefined ? associatedCase?.title : n.caseTitle,
+        updatedAt: now,
+      };
     });
+
+    try {
+      localStorage.setItem('execspace_saved_notes', JSON.stringify(updatedList));
+    } catch {}
+
+    const targetNote = updatedList.find((n) => n.id === id);
+    if (targetNote?.caseId && targetNote.caseId === get().activeCase.id && updates.content !== undefined) {
+      set({
+        notesList: updatedList,
+        notes: { ...get().notes, [targetNote.caseId]: updates.content },
+      });
+    } else {
+      set({ notesList: updatedList });
+    }
+  },
+
+  deleteNote: (id) => {
+    const noteToDelete = get().notesList.find((n) => n.id === id);
+    const updatedList = get().notesList.filter((n) => n.id !== id);
+    try {
+      localStorage.setItem('execspace_saved_notes', JSON.stringify(updatedList));
+    } catch {}
+
+    if (noteToDelete?.caseId && noteToDelete.folder === 'Case Notes') {
+      const nextNotes = { ...get().notes };
+      delete nextNotes[noteToDelete.caseId];
+      set({ notesList: updatedList, notes: nextNotes });
+    } else {
+      set({ notesList: updatedList });
+    }
+  },
+
+  addFolder: (folderName) => {
+    const trimmed = folderName.trim();
+    if (!trimmed || get().availableFolders.includes(trimmed)) return;
+    const nextFolders = [...get().availableFolders, trimmed];
+    try {
+      localStorage.setItem('execspace_folders', JSON.stringify(nextFolders));
+    } catch {}
+    set({ availableFolders: nextFolders });
   },
 
   submitFinding: ({ culprit, discrepancy, explanation, selectedEvidenceIds }) => {

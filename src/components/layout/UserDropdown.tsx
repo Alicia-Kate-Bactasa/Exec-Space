@@ -8,6 +8,7 @@ import {
   LogOut,
   ChevronDown,
   Check,
+  FileText,
 } from 'lucide-react';
 import { useCaseStore } from '../../store/useCaseStore';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -55,7 +56,7 @@ export const UserDropdown: React.FC = () => {
     };
   }, [isOpen]);
 
-  const handleSelectView = (view: 'profile' | 'help') => {
+  const handleSelectView = (view: 'profile' | 'help' | 'notes') => {
     setActiveView(view);
     setIsOpen(false);
   };
@@ -120,8 +121,25 @@ export const UserDropdown: React.FC = () => {
             </div>
           </div>
 
-          {/* Navigation Links: Profile & Help */}
+          {/* Navigation Links: Notes, Profile & Help */}
           <div className="py-1">
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => handleSelectView('notes')}
+              className={`w-full flex items-center justify-between px-4 py-2.5 text-sm transition-colors text-left group cursor-pointer ${
+                activeView === 'notes'
+                  ? 'bg-investigative-violet-subtle text-investigative-violet font-medium'
+                  : 'text-investigative-text hover:bg-investigative-surface-raised/80'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <FileText className="w-4 h-4 text-investigative-text-muted group-hover:text-investigative-violet transition-colors" />
+                <span>Notes</span>
+              </div>
+              {activeView === 'notes' && <Check className="w-4 h-4 text-investigative-violet" />}
+            </button>
+
             <button
               type="button"
               role="menuitem"

@@ -1,6 +1,21 @@
 export type InvestigationStep = 'cases' | 'schema' | 'query' | 'results' | 'evidence' | 'finding';
 
-export type ActiveView = 'landing' | 'workspace' | 'evidence' | 'finding' | 'profile' | 'help';
+export type ActiveView = 'landing' | 'workspace' | 'evidence' | 'finding' | 'profile' | 'help' | 'notes';
+
+export type NoteSortOption = 'latest' | 'oldest' | 'title-asc' | 'title-desc';
+
+export interface NoteItem {
+  id: string;
+  caseId?: string;
+  caseCode?: string;
+  caseTitle?: string;
+  title: string;
+  content: string;
+  folder: string;
+  tags?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface ColumnDefinition {
   name: string;

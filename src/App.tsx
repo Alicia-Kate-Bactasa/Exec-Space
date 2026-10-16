@@ -9,6 +9,7 @@ import { LandingPage } from './components/landing/LandingPage';
 import { AuthModal } from './components/auth/AuthModal';
 import { ProfilePage } from './components/profile/ProfilePage';
 import { HelpPage } from './components/help/HelpPage';
+import { NotesPage } from './components/notes/NotesPage';
 
 export const App: React.FC = () => {
   const { activeCase, selectCase, activeView, theme, dbError, setWorkspaceTab } = useCaseStore();
@@ -50,6 +51,10 @@ export const App: React.FC = () => {
       ) : activeView === 'profile' ? (
         <main className="flex-1 min-h-0 overflow-hidden">
           <ProfilePage />
+        </main>
+      ) : activeView === 'notes' ? (
+        <main className="flex-1 min-h-0 overflow-hidden">
+          <NotesPage />
         </main>
       ) : (
         <div className="flex flex-1 min-h-0 overflow-hidden">

@@ -12,6 +12,7 @@ import {
   Play,
   RotateCcw,
   ChevronDown,
+  FileText,
 } from 'lucide-react';
 import { CaseDefinition } from '../../types';
 
@@ -318,17 +319,27 @@ export const LandingPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Continue Button if user has active case */}
-          {lastCase && (
+          {/* Quick Action Buttons */}
+          <div className="flex items-center gap-2.5 flex-wrap self-start md:self-auto">
             <button
-              onClick={() => handleStartCase(lastCase.id)}
-              className="flex items-center space-x-2 px-4 py-2.5 rounded-full bg-investigative-surface-raised border border-investigative-border/70 hover:border-investigative-violet text-xs font-medium text-investigative-text transition-colors self-start md:self-auto cursor-pointer"
+              onClick={() => setActiveView('notes')}
+              className="flex items-center space-x-2 px-4 py-2.5 rounded-full bg-investigative-surface-raised border border-investigative-border/70 hover:border-investigative-violet text-xs font-medium text-investigative-text transition-colors cursor-pointer"
             >
-              <Play className="w-3.5 h-3.5 text-investigative-violet" />
-              <span>Continue {lastCase.code}: {lastCase.title}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <FileText className="w-3.5 h-3.5 text-investigative-violet" />
+              <span>Notes</span>
             </button>
-          )}
+
+            {lastCase && (
+              <button
+                onClick={() => handleStartCase(lastCase.id)}
+                className="flex items-center space-x-2 px-4 py-2.5 rounded-full bg-investigative-surface-raised border border-investigative-border/70 hover:border-investigative-violet text-xs font-medium text-investigative-text transition-colors cursor-pointer"
+              >
+                <Play className="w-3.5 h-3.5 text-investigative-violet" />
+                <span>Continue {lastCase.code}: {lastCase.title}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Overall Progress Bar Card */}
