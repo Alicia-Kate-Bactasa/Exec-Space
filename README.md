@@ -4,114 +4,171 @@ A minimalist database investigation playground for students.
 
 ---
 
-## Purpose
+## System Overview
 
-ExecSpace helps students and beginners develop practical database analysis skills through realistic company problem scenarios instead of memorizing isolated SQL syntax drills.
+ExecSpace is an interactive learning platform that teaches database problem-solving through real-world business scenarios. Instead of practicing isolated SQL syntax drills, students step into the role of a data investigator to uncover the root causes behind messy data problems—such as revenue discrepancies, broken loyalty tiers, duplicate transactions, and mismatched inventory ledgers.
 
-In typical learning platforms, students answer artificial exercises such as selecting rows matching a single condition. In real workplace environments, data issues are messy and ambiguous: missing revenue figures, duplicate charges, broken inventory ledgers, or customer account joins that fail silently.
+The platform runs a complete PostgreSQL database engine directly inside the browser using WebAssembly. This allows students to execute complex SQL queries (including joins, aggregates, CTEs, and window functions) instantly without installing software or connecting to external servers.
 
-ExecSpace provides students with realistic business briefs, authentic database schemas, and an in-browser PostgreSQL environment. Students explore tables, write SQL queries, verify discrepancies, pin critical query results to an Evidence board, and submit findings against case audits.
+### Investigation Workflow
 
----
-
-## Features
-
-### In-Browser PostgreSQL Engine
-ExecSpace runs a complete PostgreSQL database directly inside the browser using PGlite (WebAssembly). No database installation, cloud server, or internet connection to a backend API is required.
-
-### Database Explorer
-Inspect table names, schema definitions, column data types, primary keys, foreign keys, and row counts in real time. Quickly run sample queries to understand data formats.
-
-### SQL Workspace
-Write and execute multi-table queries using a built-in SQL editor with keyboard shortcuts (`Ctrl + Enter` / `Cmd + Enter`). Review query history and reload previous queries with a single click.
-
-### Query Results and Visualizations
-View query outputs in formatted tables with execution times and row counts. Switch to the Visualization tab to view query results as Bar, Line, or Donut charts.
-
-### Evidence Board
-Pin suspicious query results, data snapshots, and custom notes directly to an Evidence board. Collected evidence substantiates your final case finding.
-
-### Case Finding and Verification
-Synthesize investigation findings by documenting root causes, calculating exact financial or record discrepancies, and attaching supporting evidence. Receive immediate audit evaluation and scoring against the ground truth.
-
-### Investigation Notes
-An autosaving scratchpad attached to each case allows students to record intermediate hypotheses, order IDs, arithmetic notes, and patterns as they work.
-
-### Responsive Light and Dark Modes
-Designed with a black and dark violet palette with off-whites and cool grays for comfortable reading, along with a full light theme option.
+1. **Select a Case**: Choose from beginner, intermediate, or advanced business scenarios with clear problem briefs and objectives.
+2. **Explore the Database**: Review table structures, column types, primary and foreign keys, and row counts.
+3. **Write and Run Queries**: Execute SQL statements in the editor with immediate tabular results, timing metrics, and visual charts.
+4. **Collect Evidence**: Pin query snapshots, summary notes, and charts to an Evidence board.
+5. **Take Notes**: Record intermediate hypotheses, order IDs, arithmetic notes, and patterns in an organized notes workspace.
+6. **Submit Findings**: Submit identified culprits, discrepancy amounts, and explanations to receive automated audit feedback and scoring.
 
 ---
 
-## Project Plan
+## Tech Stack
 
-```
-Phase 1: Foundation and In-Browser Database Runtime
-├── Architecture setup with Vite, React, and TypeScript
-├── Integration of PGlite WebAssembly PostgreSQL engine
-└── Schema initialization and sample database seeding
-
-Phase 2: Database Workspace and SQL Tooling
-├── CodeMirror 6 SQL editor with keyboard execution
-├── Tabular results viewer with execution metrics
-├── Dynamic Recharts visualization (Bar, Line, Donut)
-└── Query history logging and instant re-run capability
-
-Phase 3: Evidence Collection and Finding Evaluation
-├── Evidence Board with snapshot capture and notes
-├── Case finding submission interface with evidence checklists
-└── Automated ground-truth audit verification and debrief notes
-
-Phase 4: Interface and Branding Overhaul
-├── Landing page introduction with showcase workflow
-├── Google Font typography integration (Poppins and JetBrains Mono)
-├── Monochromatic dark violet and black visual palette
-└── Minimalist navigation with circular border radius accents
-
-Phase 5: Case Expansion and Performance
-├── Additional business problem scenarios
-├── Exportable case reports
-└── Query execution profiling
-```
-
----
-
-## Stack
-
-![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+### Frontend
+![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)
 ![CodeMirror](https://img.shields.io/badge/CodeMirror_6-2B2B2B?style=for-the-badge&logo=codemirror&logoColor=white)
 ![Zustand](https://img.shields.io/badge/Zustand-443E3A?style=for-the-badge)
 ![Recharts](https://img.shields.io/badge/Recharts-22B5BF?style=for-the-badge)
 ![Lucide](https://img.shields.io/badge/Lucide_Icons-2C3E50?style=for-the-badge)
 
-* **Framework**: React 18 with TypeScript and Vite
-* **Database**: PGlite (PostgreSQL compiled to WebAssembly)
-* **Code Editor**: CodeMirror 6 with SQL language support
-* **State Management**: Zustand
-* **Styling**: Tailwind CSS v4
-* **Charting**: Recharts
-* **Icons**: Lucide React
-* **Typography**: Google Fonts (Poppins and JetBrains Mono)
+* **React 19**: Component-based user interface library.
+* **TypeScript**: Type-safe application development across all components and stores.
+* **Vite**: Fast frontend build tool and local development server.
+* **Tailwind CSS v4**: Utility-first styling with custom dark violet and light themes.
+* **CodeMirror 6**: In-browser code editor with SQL syntax highlighting and keybindings.
+* **Zustand**: Lightweight client state management for cases, evidence, notes, and user session.
+* **Recharts**: Data visualization library for dynamic bar, line, and donut charts.
+* **Lucide React**: Clean vector icons for navigation, controls, and schema indicators.
+* **React Resizable Panels**: Adjustable multi-pane layout for editor and results.
+
+### Backend
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![Drizzle ORM](https://img.shields.io/badge/Drizzle_ORM-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black)
+![TSX](https://img.shields.io/badge/TSX-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Dotenv](https://img.shields.io/badge/Dotenv-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black)
+![CORS](https://img.shields.io/badge/CORS-E34F26?style=for-the-badge)
+
+* **Node.js**: Server runtime environment for planned backend services and tooling.
+* **Express.js**: REST API server framework for cloud persistence and user account services.
+* **Drizzle ORM**: TypeScript ORM for schema definition, migrations, and database queries.
+* **TSX**: Fast TypeScript execution engine for server scripts and migrations.
+* **Dotenv**: Environment variable configuration management.
+* **CORS**: Cross-origin resource sharing middleware for secure API access.
+
+### Database
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![PGlite](https://img.shields.io/badge/PGlite_(WASM)-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)
+![IndexedDB](https://img.shields.io/badge/IndexedDB-29ABE2?style=for-the-badge&logo=html5&logoColor=white)
+
+* **PGlite (ElectricSQL)**: In-browser PostgreSQL engine compiled to WebAssembly. Enables authentic relational database queries without backend latency or setup.
+* **PostgreSQL**: Production relational database planned for persistent user accounts, cloud case submissions, and custom scenarios.
+* **IndexedDB**: Browser-side storage powering PGlite persistence and offline case state.
+
+### Tools
+![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![PostCSS](https://img.shields.io/badge/PostCSS-DD3A0A?style=for-the-badge&logo=postcss&logoColor=white)
+
+* **npm**: Package manager for dependency installation and build scripts.
+* **Git**: Distributed version control system following feature-branch workflows.
+* **GitHub**: Source code hosting, pull request reviews, and issue tracking.
+* **PostCSS & Autoprefixer**: CSS transformation and browser compatibility tooling.
 
 ---
 
-## Integrations
+## Key Features & Integrations
 
-### PGlite (ElectricSQL)
-ExecSpace embeds PGlite, a lightweight WebAssembly build of PostgreSQL. Each investigation case loads its schema and data rows directly into client memory via IndexedDB and WASM, enabling authentic SQL features including CTEs, window functions, joins, and aggregates with zero server infrastructure.
+### Key Features
 
-### CodeMirror 6 (`@uiw/react-codemirror`)
-Provides code editing with SQL syntax highlighting, custom themes, line numbering, bracket matching, and shortcut bindings (`Ctrl + Enter` to execute).
+* **In-Browser PostgreSQL Engine**: Runs a complete PostgreSQL instance directly inside the browser using PGlite and WebAssembly. No database installation, cloud server, or internet connection required.
+* **Database Explorer**: Inspect table names, schema definitions, column data types, primary keys, foreign keys, and row counts in real time.
+* **SQL Workspace**: Write and run multi-table queries with keyboard execution shortcuts (`Ctrl + Enter` / `Cmd + Enter`), query history logs, and instant query re-execution.
+* **Query Results and Visualizations**: View query outputs in formatted tables with execution times and row counts, or switch to the Visualization tab to render dynamic Bar, Line, and Donut charts.
+* **Evidence Board**: Pin query outputs, data snapshots, and chart cards to an Evidence board to substantiate case findings.
+* **Case Finding and Verification**: Synthesize investigation findings by documenting root causes, calculating exact financial or record discrepancies, and attaching supporting evidence for automated audit grading.
+* **Investigation Notes**: Built-in notes scratchpad with folder organization, case tag linking, and automatic saving.
+* **User Profile & Progression**: Track completed investigations, accuracy scores, and solved cases across difficulty tiers.
+* **Dark and Light Themes**: Designed with a comfortable dark violet and black visual palette alongside a full light mode.
 
-### Recharts
-Translates tabular query outputs into responsive Bar, Line, and Donut charts. Columns from query results are mapped dynamically to chart axes and data series.
+### Core Integrations
 
-### Lucide React
-Supplies consistent vector icons for navigation, data actions, schema keys, and status badges.
+* **PGlite (ElectricSQL)**: Embeds a lightweight WebAssembly build of PostgreSQL into client memory. Each investigation case loads its schema and data rows directly into IndexedDB, supporting joins, subqueries, CTEs, and window functions.
+* **CodeMirror 6 (`@uiw/react-codemirror`)**: Provides code editing with SQL syntax highlighting, custom dark/light editor themes, line numbering, bracket matching, and execution shortcuts.
+* **Recharts**: Maps tabular query results dynamically to responsive Bar, Line, and Donut charts for immediate visual analysis.
+* **Lucide React**: Supplies consistent, accessible vector icons for navigation, data actions, schema keys, and status indicators.
+
+---
+
+## Repository Structure
+
+```
+Exec-Space/
+├── public/                     # Static public assets and case database files
+├── src/
+│   ├── components/             # User interface components
+│   │   ├── auth/               # Authentication and sign-in modal
+│   │   ├── evidence/           # Evidence board and snapshot capture modal
+│   │   ├── findings/           # Case submission reports and evaluation views
+│   │   ├── help/               # Documentation and SQL beginner guides
+│   │   ├── landing/            # Landing page and showcase walkthrough
+│   │   ├── layout/             # Header, Sidebar, Lineage bar, and User dropdown
+│   │   ├── notes/              # Notes page and in-case scratchpad
+│   │   ├── profile/            # User profile, statistics, and solved cases
+│   │   └── workspace/          # Case details, SQL editor, query results, and charts
+│   ├── db/                     # Database cases, schema definitions, and PGlite runtime
+│   │   ├── casesBeginner.ts    # Beginner investigation scenarios
+│   │   ├── casesIntermediate.ts# Intermediate investigation scenarios
+│   │   ├── casesAdvanced.ts    # Advanced investigation scenarios
+│   │   ├── casesData.ts        # Case repository registry and seed loader
+│   │   └── pglite.ts           # PGlite WebAssembly database instance manager
+│   ├── store/                  # Zustand state stores
+│   │   ├── useAuthStore.ts     # User authentication state
+│   │   └── useCaseStore.ts     # Case selection, queries, evidence, and notes state
+│   ├── types/                  # TypeScript interface and type declarations
+│   │   └── index.ts            # Data models for cases, queries, evidence, and notes
+│   ├── App.tsx                 # Root application component with view routing
+│   ├── main.tsx                # React application entry point
+│   ├── index.css               # Global CSS and Tailwind directives
+│   └── vite-env.d.ts           # Vite TypeScript environment declarations
+├── index.html                  # HTML entry template
+├── package.json                # Project dependencies and script definitions
+├── tsconfig.json               # TypeScript compiler configuration
+├── vite.config.ts              # Vite bundler configuration
+└── README.md                   # Project documentation
+```
+
+---
+
+## Future Plans with Projects
+
+### Project 1: Backend API & Cloud Sync
+* **Express.js API Server**: Provide secure REST endpoints for user authentication, profile data, and saved findings.
+* **Cloud Database Persistence**: Connect PostgreSQL with Drizzle ORM to persist user investigations and notes across devices.
+* **Case State Synchronization**: Seamlessly sync local PGlite progress with cloud accounts.
+
+### Project 2: Custom Case Creator & Schema Builder
+* **Scenario Authoring Tool**: Allow educators and mentors to design custom business problems with custom schemas.
+* **Data Importer**: Upload CSV files or SQL seed scripts to auto-generate new case databases.
+* **Custom Rubric Builder**: Define custom ground-truth verification checks and discrepancy calculation tests.
+
+### Project 3: Collaborative Investigations
+* **Team Workspaces**: Allow student pairs to investigate the same case in real time.
+* **Shared Evidence Boards**: Pin and annotate evidence cards visible to all team members.
+* **Peer Reviews**: Submit case findings for peer debriefing and collaborative discussion.
+
+### Project 4: Expanded Business Case Library
+* **E-Commerce & Logistics**: Inventory reconciliation, lost shipment audits, and warehouse capacity modeling.
+* **Subscription & SaaS Billing**: Churn analysis, prorated subscription overcharges, and MRR calculations.
+* **Security & Fraud Detection**: Detecting concurrent logins, credential stuffing patterns, and unauthorized balance adjustments.
+
+### Project 5: SQL Performance & Query Profiling
+* **Visual Execution Plans**: Visual `EXPLAIN ANALYZE` tree maps to teach indexing and query performance.
+* **Index Recommendations**: Interactive suggestions for query optimization and table scanning improvements.
+* **Query Performance Benchmarks**: Side-by-side execution time comparisons for alternative query strategies.
 
 ---
 
