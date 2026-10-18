@@ -33,16 +33,6 @@ The platform runs a complete PostgreSQL database engine directly inside the brow
 ![Recharts](https://img.shields.io/badge/Recharts-22B5BF?style=for-the-badge)
 ![Lucide](https://img.shields.io/badge/Lucide_Icons-2C3E50?style=for-the-badge)
 
-* **React 19**: Component-based user interface library.
-* **TypeScript**: Type-safe application development across all components and stores.
-* **Vite**: Fast frontend build tool and local development server.
-* **Tailwind CSS v4**: Utility-first styling with custom dark violet and light themes.
-* **CodeMirror 6**: In-browser code editor with SQL syntax highlighting and keybindings.
-* **Zustand**: Lightweight client state management for cases, evidence, notes, and user session.
-* **Recharts**: Data visualization library for dynamic bar, line, and donut charts.
-* **Lucide React**: Clean vector icons for navigation, controls, and schema indicators.
-* **React Resizable Panels**: Adjustable multi-pane layout for editor and results.
-
 ### Backend
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
@@ -51,32 +41,16 @@ The platform runs a complete PostgreSQL database engine directly inside the brow
 ![Dotenv](https://img.shields.io/badge/Dotenv-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black)
 ![CORS](https://img.shields.io/badge/CORS-E34F26?style=for-the-badge)
 
-* **Node.js**: Server runtime environment for planned backend services and tooling.
-* **Express.js**: REST API server framework for cloud persistence and user account services.
-* **Drizzle ORM**: TypeScript ORM for schema definition, migrations, and database queries.
-* **TSX**: Fast TypeScript execution engine for server scripts and migrations.
-* **Dotenv**: Environment variable configuration management.
-* **CORS**: Cross-origin resource sharing middleware for secure API access.
-
 ### Database
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![PGlite](https://img.shields.io/badge/PGlite_(WASM)-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)
 ![IndexedDB](https://img.shields.io/badge/IndexedDB-29ABE2?style=for-the-badge&logo=html5&logoColor=white)
-
-* **PGlite (ElectricSQL)**: In-browser PostgreSQL engine compiled to WebAssembly. Enables authentic relational database queries without backend latency or setup.
-* **PostgreSQL**: Production relational database planned for persistent user accounts, cloud case submissions, and custom scenarios.
-* **IndexedDB**: Browser-side storage powering PGlite persistence and offline case state.
 
 ### Tools
 ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 ![PostCSS](https://img.shields.io/badge/PostCSS-DD3A0A?style=for-the-badge&logo=postcss&logoColor=white)
-
-* **npm**: Package manager for dependency installation and build scripts.
-* **Git**: Distributed version control system following feature-branch workflows.
-* **GitHub**: Source code hosting, pull request reviews, and issue tracking.
-* **PostCSS & Autoprefixer**: CSS transformation and browser compatibility tooling.
 
 ---
 
